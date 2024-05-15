@@ -6,4 +6,8 @@
     </style>
 
     <style name="Theme.AccountApp" parent="Base.Theme.AccountApp" />
+    <style name="floatActionButton">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">100dp</item>
+    </style>
 </resources>
