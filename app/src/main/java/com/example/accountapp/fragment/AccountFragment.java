@@ -1,5 +1,6 @@
 package com.example.accountapp.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,10 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import com.example.accountapp.AddAccount;
 import com.example.accountapp.R;
 import com.example.accountapp.adapter.AccountRecyclAdapter;
 import com.example.accountapp.data.AccountData;
 import com.example.accountapp.data.AccountDataItem;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +26,7 @@ import java.util.List;
 public class AccountFragment extends Fragment {
 
     private RecyclerView recyclerView;
+    private FloatingActionButton floatingActionButton;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -34,12 +40,23 @@ public class AccountFragment extends Fragment {
     }
 
     private void initView() {
+        initRecycleView();
+        floatingActionButton = getView().findViewById(R.id.floatActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), AddAccount.class));
+            }
+        });
+
+    }
+
+    private void initRecycleView() {
         // 设置适配器
         // 1.设置适配器的4大组成部分
         LinearLayout linearLayout = new LinearLayout(getContext());
         recyclerView = getView().findViewById(R.id.account_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
         // 2.准备数据
         List<AccountData> list = new ArrayList<>();
         List<AccountDataItem> listItem = new ArrayList<>();

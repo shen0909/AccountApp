@@ -13,6 +13,9 @@
         android:theme="@style/Theme.AccountApp"
         tools:targetApi="31">
         <activity
+            android:name=".AddAccount"
+            android:exported="false" />
+        <activity
             android:name=".sumAccountActivity"
             android:exported="false" />
         <activity
