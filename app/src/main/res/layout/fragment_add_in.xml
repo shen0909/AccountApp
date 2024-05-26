@@ -5,10 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".fragment.addaccount.AddInFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/in_icon_list"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="添加收入账单" />
+        android:layout_marginTop="10dp"/>
 
 </FrameLayout>

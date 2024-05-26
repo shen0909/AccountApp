@@ -38,10 +38,10 @@ public class AddOutFragment extends Fragment{
             }
         });
         recyclerView.setLayoutManager(gridLayoutManager); //设置布局
-        List<AddIconItemData> addIconItemDataList = new AllData().getAddIconItemDataList();
+        List<AddIconItemData> addIconItemDataList = new AllData().getAddIconOutDataList();
         System.out.println(addIconItemDataList.size());
 
-        AddAccountIcomRecycleyAdapter adapter = new AddAccountIcomRecycleyAdapter(new AllData().getAddIconItemDataList(), getContext(), new AddAccount());
+        AddAccountIcomRecycleyAdapter adapter = new AddAccountIcomRecycleyAdapter(new AllData().getAddIconOutDataList(), getContext(), new AddAccount(),0);
         recyclerView.setAdapter(adapter); //设置适配器
     }
 }

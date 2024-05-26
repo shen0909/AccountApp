@@ -22,11 +22,13 @@ public class AddAccountIcomRecycleyAdapter extends RecyclerView.Adapter<AddAccou
     private final Context context;
     private int selecPosition = 0; //当前选中的位序
     private final InterfaceCollection.ChooseIcon chooseIcon;
+    private int currencyType; // 0-支出 1-收入
 
-    public AddAccountIcomRecycleyAdapter(List<AddIconItemData> addIconItemDataList, Context context,InterfaceCollection.ChooseIcon chooseIcon) {
+    public AddAccountIcomRecycleyAdapter(List<AddIconItemData> addIconItemDataList, Context context,InterfaceCollection.ChooseIcon chooseIcon,int currencyType) {
         this.addIconItemDataList = addIconItemDataList;
         this.context = context;
         this.chooseIcon = chooseIcon;
+        this.currencyType = currencyType;
     }
 
     @NonNull
@@ -50,7 +52,11 @@ public class AddAccountIcomRecycleyAdapter extends RecyclerView.Adapter<AddAccou
         // 当前是否被选中
         if (position == selecPosition) {
             holder.icon.setImageResource(addIconItemDataList.get(position).getIconPath());
-            holder.card_icon.setCardBackgroundColor(ContextCompat.getColor(context, R.color.money_green));
+            if(currencyType == 0){
+                holder.card_icon.setCardBackgroundColor(ContextCompat.getColor(context, R.color.money_green));
+            }else{
+                holder.card_icon.setCardBackgroundColor(ContextCompat.getColor(context, R.color.money_red));
+            }
         } else {
             holder.icon.setImageResource(addIconItemDataList.get(position).getUnselectIconPath());
             holder.card_icon.setCardBackgroundColor(ContextCompat.getColor(context, R.color.back_grey));
