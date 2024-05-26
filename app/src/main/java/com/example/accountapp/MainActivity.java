@@ -5,17 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
-
 import android.os.Bundle;
 import android.view.MenuItem;
-
-import com.example.accountapp.fragment.AccountFragment;
-import com.example.accountapp.fragment.MoneyFragment;
-import com.example.accountapp.fragment.SaveMoneyFragment;
-import com.example.accountapp.fragment.SumAllMoney;
+import com.example.accountapp.pages.AccountFragment;
+import com.example.accountapp.pages.MoneyFragment;
+import com.example.accountapp.pages.SaveMoneyFragment;
+import com.example.accountapp.pages.SumAllMoney;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,21 +31,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setBtNv() {
-        bt_Nv.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                if (id == R.id.bt_zd) {
-                    viewPager2.setCurrentItem(0);
-                } else if (id == R.id.bt_zc) {
-                    viewPager2.setCurrentItem(1);
-                } else if (id == R.id.bt_cq) {
-                    viewPager2.setCurrentItem(2);
-                } else if (id == R.id.bt_tj) {
-                    viewPager2.setCurrentItem(3);
-                }
-                return true;
+        bt_Nv.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.bt_zd) {
+                viewPager2.setCurrentItem(0);
+            } else if (id == R.id.bt_zc) {
+                viewPager2.setCurrentItem(1);
+            } else if (id == R.id.bt_cq) {
+                viewPager2.setCurrentItem(2);
+            } else if (id == R.id.bt_tj) {
+                viewPager2.setCurrentItem(3);
             }
+            return true;
         });
     }
 
