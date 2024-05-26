@@ -7,19 +7,20 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import com.example.accountapp.InterfaceCollection;
 import com.example.accountapp.R;
+import com.example.accountapp.data.AddIconItemData;
 import com.example.accountapp.fragment.addaccount.AddExchangeFragment;
 import com.example.accountapp.fragment.addaccount.AddInFragment;
 import com.example.accountapp.fragment.addaccount.AddOutFragment;
 
 // 添加账单Activity
-public class AddAccount extends AppCompatActivity {
+public class AddAccount extends AppCompatActivity implements InterfaceCollection.ChooseIcon {
     private int tabIndex = 1; //当前选中的tab页
-    private TextView tab1,tab2,tab3,cancelTxt;
+    private TextView tab1;
+    private TextView tab2;
+    private TextView tab3;
     private View divider1,divider2;
-    private FragmentContainerView fragmentContainerView;
-    private FragmentManager fragmentManager;
-    private FragmentTransaction fragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +41,9 @@ public class AddAccount extends AppCompatActivity {
         tab3 = findViewById(R.id.tab3);
         divider1 = findViewById(R.id.divider1);
         divider2 = findViewById(R.id.divider2);
-        cancelTxt = findViewById(R.id.cancelTxt);
-        cancelTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        fragmentContainerView = findViewById(R.id.icon_frag);
+        TextView cancelTxt = findViewById(R.id.cancelTxt);
+        cancelTxt.setOnClickListener(view -> finish());
+        FragmentContainerView fragmentContainerView = findViewById(R.id.icon_frag);
     }
 
     // 切换 tab页 点击方法
@@ -87,5 +83,9 @@ public class AddAccount extends AppCompatActivity {
             fragmentTransaction.replace(R.id.icon_frag,new AddExchangeFragment());
             fragmentTransaction.commit();
         }
+    }
+
+    public void showChoose(AddIconItemData chooseItem) {
+        System.out.println(chooseItem.getTitle());
     }
 }

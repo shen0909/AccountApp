@@ -1,6 +1,7 @@
 package com.example.accountapp.fragment.addaccount;
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -13,12 +14,12 @@ import com.example.accountapp.R;
 import com.example.accountapp.adapter.AddAccountIcomRecycleyAdapter;
 import com.example.accountapp.data.AddIconItemData;
 import com.example.accountapp.data.AllData;
+import com.example.accountapp.pages.AddAccount;
+
 import java.util.List;
 
 // 添加账单-支出Fragment
-public class AddOutFragment extends Fragment {
-    private RecyclerView recyclerView;
-    private GridLayoutManager gridLayoutManager;
+public class AddOutFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -28,8 +29,8 @@ public class AddOutFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = view.findViewById(R.id.out_icon_list);
-        gridLayoutManager = new GridLayoutManager(getContext(),5);
+        RecyclerView recyclerView = view.findViewById(R.id.out_icon_list);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 5);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -40,7 +41,7 @@ public class AddOutFragment extends Fragment {
         List<AddIconItemData> addIconItemDataList = new AllData().getAddIconItemDataList();
         System.out.println(addIconItemDataList.size());
 
-        AddAccountIcomRecycleyAdapter adapter = new AddAccountIcomRecycleyAdapter(new AllData().getAddIconItemDataList(),getContext());
+        AddAccountIcomRecycleyAdapter adapter = new AddAccountIcomRecycleyAdapter(new AllData().getAddIconItemDataList(), getContext(), new AddAccount());
         recyclerView.setAdapter(adapter); //设置适配器
     }
 }

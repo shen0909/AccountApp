@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.accountapp.InterfaceCollection;
 import com.example.accountapp.R;
 import com.example.accountapp.data.AddIconItemData;
 import java.util.List;
@@ -17,13 +18,15 @@ import java.util.List;
 // 添加账单的图标 RecyclerView的Adapter
 public class AddAccountIcomRecycleyAdapter extends RecyclerView.Adapter<AddAccountIcomRecycleyAdapter.ViewHolder> {
 
-    private List<AddIconItemData> addIconItemDataList;
-    private Context context;
+    private final List<AddIconItemData> addIconItemDataList;
+    private final Context context;
     private int selecPosition = 0; //当前选中的位序
+    private final InterfaceCollection.ChooseIcon chooseIcon;
 
-    public AddAccountIcomRecycleyAdapter(List<AddIconItemData> addIconItemDataList, Context context) {
+    public AddAccountIcomRecycleyAdapter(List<AddIconItemData> addIconItemDataList, Context context,InterfaceCollection.ChooseIcon chooseIcon) {
         this.addIconItemDataList = addIconItemDataList;
         this.context = context;
+        this.chooseIcon = chooseIcon;
     }
 
     @NonNull
@@ -31,12 +34,10 @@ public class AddAccountIcomRecycleyAdapter extends RecyclerView.Adapter<AddAccou
     public AddAccountIcomRecycleyAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.add_icon_recycle_item, parent, false);
         ViewHolder holder = new ViewHolder(view);
-        holder.icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selecPosition = holder.getAdapterPosition(); // 传出点击位置
-                notifyDataSetChanged();
-            }
+        holder.icon.setOnClickListener(view1 -> {
+            selecPosition = holder.getAdapterPosition(); // 传出点击位置
+            chooseIcon.showChoose(addIconItemDataList.get(selecPosition));
+            notifyDataSetChanged();
         });
         return holder;
     }
@@ -62,9 +63,9 @@ public class AddAccountIcomRecycleyAdapter extends RecyclerView.Adapter<AddAccou
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView icon, more_icon;
-        private TextView icon_title;
-        private CardView card_icon;
+        private final ImageView icon, more_icon;
+        private final TextView icon_title;
+        private final CardView card_icon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
