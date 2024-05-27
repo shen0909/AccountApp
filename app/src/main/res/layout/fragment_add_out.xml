@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="20dp"
     tools:context=".fragment.addaccount.AddOutFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -10,6 +11,5 @@
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"/>
+        android:layout_height="match_parent"/>
 </FrameLayout>

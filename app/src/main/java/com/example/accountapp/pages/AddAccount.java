@@ -85,6 +85,7 @@ public class AddAccount extends AppCompatActivity implements InterfaceCollection
         }
     }
 
+    /// 处理从RecycleView中得到的数据
     public void showChoose(AddIconItemData chooseItem) {
         System.out.println(chooseItem.getTitle());
     }
