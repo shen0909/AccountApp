@@ -4,12 +4,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.accountapp.R;
-import com.example.accountapp.data.AccountDataItem;
-
+import com.example.accountapp.data.Entry.AccountDataItem;
 import java.util.List;
 
 public class AccountListItemRecycle extends RecyclerView.Adapter<AccountListItemRecycle.ViewHolder> {
@@ -29,7 +27,10 @@ public class AccountListItemRecycle extends RecyclerView.Adapter<AccountListItem
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        System.out.println("binding数据："+accountDataItemList.get(position));
         holder.detailMoney.setText(accountDataItemList.get(position).getMoney());
+        holder.type_tv.setText(accountDataItemList.get(position).getType());
+        holder.detail.setText(accountDataItemList.get(position).getDetail());
     }
 
     @Override
@@ -39,10 +40,12 @@ public class AccountListItemRecycle extends RecyclerView.Adapter<AccountListItem
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView detailMoney;
+        private TextView detailMoney,type_tv,detail;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             detailMoney = itemView.findViewById(R.id.detial_money);
+            type_tv = itemView.findViewById(R.id.head_name);
+            detail = itemView.findViewById(R.id.detial);
         }
     }
 }

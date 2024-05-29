@@ -199,5 +199,11 @@
             </LinearLayout>
 
         </LinearLayout>
+        <Button
+            android:id="@+id/finish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="submit"
+            android:text="完成"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

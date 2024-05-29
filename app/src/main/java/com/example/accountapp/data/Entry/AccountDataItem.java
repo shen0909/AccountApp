@@ -1,12 +1,20 @@
-package com.example.accountapp.data;
+package com.example.accountapp.data.Entry;
 
-// 账单数据
+
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+// 账单数据类
+@Entity(tableName = "AccountListItemTable")
 public class AccountDataItem {
-    String money; // 账单金额
-    String type; // 消费类别 -餐饮类
-    String detail; // 消费详情
-    String data; //消费时间
-    int in; // 1.收入 2.支出
+    @PrimaryKey(autoGenerate = true)
+    private int id = 0;
+    private String money; // 账单金额
+    private String type; // 消费类别 -餐饮类
+    private String detail; // 消费详情(备注)
+    private String data; //消费时间
+    private int in; // 1.收入 2.支出
 
     public AccountDataItem(String money, String type, String detail, String data, int in) {
         this.money = money;
@@ -14,6 +22,14 @@ public class AccountDataItem {
         this.detail = detail;
         this.data = data;
         this.in = in;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getMoney() {
@@ -54,5 +70,11 @@ public class AccountDataItem {
 
     public void setIn(int in) {
         this.in = in;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return getId()+"  "+getDetail()+"  "+getMoney()+"  "+getType();
     }
 }
