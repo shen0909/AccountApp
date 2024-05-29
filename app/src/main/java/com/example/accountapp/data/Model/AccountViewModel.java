@@ -1,9 +1,11 @@
-package com.example.accountapp.data;
+package com.example.accountapp.data.Model;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+
+import com.example.accountapp.data.Repository.DataRepository;
 import com.example.accountapp.data.Entry.AccountDataItem;
 import java.util.List;
 

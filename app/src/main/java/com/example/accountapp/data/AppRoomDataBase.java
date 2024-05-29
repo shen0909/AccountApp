@@ -14,7 +14,7 @@ public abstract class AppRoomDataBase extends RoomDatabase {
     private static volatile AppRoomDataBase INSTANCE;
     public abstract AccountDao accountDao();
 
-    static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(4);
+    public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(4);
     // 单例模式
     public static AppRoomDataBase getDataBase(Context context){
         if (INSTANCE == null) {

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.accountapp.R;
@@ -51,6 +52,8 @@ public class AccountRecyclAdapter extends RecyclerView.Adapter<AccountRecyclAdap
 
         AccountListItemRecycle accountListItemRecycle = new AccountListItemRecycle(list.get(position).getAccountList());
         holder.recyclerView.setAdapter(accountListItemRecycle);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,DividerItemDecoration.VERTICAL);
+        holder.recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
     @Override

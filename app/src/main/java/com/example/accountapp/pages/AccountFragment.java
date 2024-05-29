@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.example.accountapp.R;
 import com.example.accountapp.adapter.AccountRecyclAdapter;
-import com.example.accountapp.data.AccountViewModel;
+import com.example.accountapp.data.Model.AccountViewModel;
 import com.example.accountapp.data.AccountData;
 import com.example.accountapp.data.Entry.AccountDataItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -75,6 +76,8 @@ public class AccountFragment extends Fragment {
         list.add(new AccountData("330",listItem));
         accountRecyclAdapter = new AccountRecyclAdapter(list,getContext());
         recyclerView.setAdapter(accountRecyclAdapter);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
     }
     public void updateRecycleView(){
         List<AccountData> list = new ArrayList<>();

@@ -1,7 +1,9 @@
-package com.example.accountapp.data;
+package com.example.accountapp.data.Repository;
 
 import android.content.Context;
 import androidx.lifecycle.LiveData;
+
+import com.example.accountapp.data.AppRoomDataBase;
 import com.example.accountapp.data.Dao.AccountDao;
 import com.example.accountapp.data.Entry.AccountDataItem;
 import java.util.List;
@@ -11,14 +13,14 @@ import java.util.List;
 // 为应用程序其余部分的数据访问提供了干净的 API。
 public class DataRepository {
     private final AccountDao accountDao;
-
+    private AppRoomDataBase appRoomDataBase;
     public DataRepository(Context context) {
-        AppRoomDataBase appRoomDataBase = AppRoomDataBase.getDataBase(context);
+        appRoomDataBase = AppRoomDataBase.getDataBase(context);
         accountDao = appRoomDataBase.accountDao();
     }
 
     public void insert(AccountDataItem accountDataItem) {
-        AppRoomDataBase.databaseWriteExecutor.execute(() -> accountDao.insertAccount(accountDataItem));
+        appRoomDataBase.databaseWriteExecutor.execute(() -> accountDao.insertAccount(accountDataItem));
     }
 
     public LiveData<List<AccountDataItem>> getData() {
