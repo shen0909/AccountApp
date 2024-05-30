@@ -3,11 +3,13 @@ package com.example.accountapp.pages;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.example.accountapp.InterfaceCollection;
 import com.example.accountapp.R;
 import com.example.accountapp.data.Entry.AccountDataItem;
@@ -16,6 +18,7 @@ import com.example.accountapp.data.Repository.DataRepository;
 import com.example.accountapp.fragment.addaccount.AddExchangeFragment;
 import com.example.accountapp.fragment.addaccount.AddInFragment;
 import com.example.accountapp.fragment.addaccount.AddOutFragment;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -150,11 +153,10 @@ public class AddAccount extends AppCompatActivity implements InterfaceCollection
         } else if (id == node.getId()) {
             setMoney(node.getText().toString());
         } else if (id == clear.getId()) {
-            int length = money.getText().length() - 1;
-            String newMoney = money.getText().subSequence(0, length).toString();
-            if(newMoney.isEmpty()){
+            String newMoney = cancelEndChar(money.getText().toString());
+            if (newMoney.isEmpty()) {
                 money.setText("0.00");
-            }else{
+            } else {
                 money.setText(newMoney);
             }
         }
@@ -167,6 +169,7 @@ public class AddAccount extends AppCompatActivity implements InterfaceCollection
         }
     }
 
+    /// 点击数字键盘修改金钱
     public void setMoney(String addMoney) {
         money.setText(money.getText() + addMoney);
         System.out.println("money:" + money.getText() + "");
@@ -179,41 +182,34 @@ public class AddAccount extends AppCompatActivity implements InterfaceCollection
     }
 
     // todo:如何才能在连续点两次的情况下只输入一次？连续点两次加，会添加×
-    public void calculate(View view) {
+    public void calculateShow(View view) {
         int id = view.getId();
         char endChar = money.getText().charAt(money.getText().length() - 1);
         String newMoney = money.getText().toString();
-        // 如果最后一位是运算符，则修改成相反运算符，否则加上运算符
-        // 截掉最后一位运算符得到新值
-        if (endChar == '+' || endChar == '×' || endChar == '-'|| endChar == '÷') {
-            int length = money.getText().length() - 1;
-            newMoney = money.getText().subSequence(0, length).toString();
+
+        /// 如果最后一位是运算符，则修改成相反运算符，否则加上运算符
+        // 1.第一次点击此方法或者前面是以为是数字，运算符都该是初始状态，如何判断第一次？newMoeny的值是否有变化
+        /* 有变化：说明不是第一次，说明前面有运算符且点击了运算符
+         * 没有变化说明是第一次，运算符状态初始化*/
+        if (endChar == '+' || endChar == '×' || endChar == '-' || endChar == '÷') {
+            newMoney = cancelEndChar(money.getText().toString());
             System.out.println("最后一位是运算符");
-        }
-        // 如果 newMoney和money的值不一样,说明前面有运算符且点击了运算符
-        if(newMoney != money.getText()){
-            System.out.println("前面一位是运算符，且点击了运算符");
-        }
-        // 说明这是第一次，或者前面一位是数字
-        else{
+        } else if (newMoney == money.getText()) {
             System.out.println("第一次，或者前面一位是数字");
             isAdd = false;
             isReduce = false;
         }
         if (id == add_x.getId()) {
             isAdd = !isAdd;
-            if (isAdd) {
-                money.setText(newMoney + "+");
-            } else {
-                money.setText(newMoney + "×");
-            }
+            money.setText(newMoney + (isAdd ? "+" : "×"));
         } else if (id == reduce_chu.getId()) {
             isReduce = !isReduce;
-            if (isReduce) {
-                money.setText(newMoney + "-");
-            } else {
-                money.setText(newMoney + "÷");
-            }
+            money.setText(newMoney + (isReduce ? "-" : "÷"));
         }
+    }
+    /// 删除最后一个字符
+    public String cancelEndChar(String string){
+        int length = string.length() - 1;
+        return string.subSequence(0, length).toString();
     }
 }

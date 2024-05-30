@@ -243,6 +243,7 @@
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
+                    android:onClick="calculateShow"
                     android:text="+ x" />
             </LinearLayout>
 
@@ -280,6 +281,7 @@
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     style="@style/keyBroadStyle"
+                    android:onClick="calculateShow"
                     android:layout_weight="1"
                     android:text="- /" />
             </LinearLayout>
@@ -366,12 +368,5 @@
 
             </LinearLayout>
         </LinearLayout>
-
-        <!--        <Button-->
-<!--            android:id="@+id/finish"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:onClick="submit"-->
-<!--            android:text="完成"/>-->
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
