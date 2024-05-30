@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.accountapp.InterfaceCollection;
 import com.example.accountapp.R;
@@ -19,22 +20,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-// 添加账单Activity
+// 添加账单 Activity
 public class AddAccount extends AppCompatActivity implements InterfaceCollection.ChooseIcon {
     private int tabIndex = 1; //当前选中的tab页 1.支出 2.收入 3.转账
     private TextView tab1, tab2, tab3;
-    private TextView money, finish, save_continue;
+    private TextView money, finish, save_continue, node, reduce_chu, add_x;
+    private LinearLayout clear;
     private EditText remark_txt;
     private View divider1, divider2;
     private String type;
     private List<TextView> num_list = new ArrayList<>();
     private DataRepository dataRepository;
+    private Boolean isAdd = false; // 初始是加号
+    private Boolean isReduce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_account);
-        dataRepository  = new DataRepository(getApplicationContext());
+        dataRepository = new DataRepository(getApplicationContext());
         initView();
         // 动态加载 Fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -53,7 +57,7 @@ public class AddAccount extends AppCompatActivity implements InterfaceCollection
         TextView cancelTxt = findViewById(R.id.cancelTxt);
         cancelTxt.setOnClickListener(view -> finish());
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i <= 9; i++) {
             int textViewId = getResources().getIdentifier("num_" + i, "id", getPackageName());
             TextView textView = findViewById(textViewId);
             num_list.add(textView);
@@ -62,6 +66,10 @@ public class AddAccount extends AppCompatActivity implements InterfaceCollection
         finish = findViewById(R.id.finish);
         save_continue = findViewById(R.id.save_continue);
         remark_txt = findViewById(R.id.remark_txt);
+        node = findViewById(R.id.node);
+        clear = findViewById(R.id.clear);
+        add_x = findViewById(R.id.add_x);
+        reduce_chu = findViewById(R.id.reduce_chu);
     }
 
     // 切换 tab页 点击方法
@@ -112,33 +120,100 @@ public class AddAccount extends AppCompatActivity implements InterfaceCollection
         System.out.println(type);
     }
 
+    // money == 0.00 归零  不等于 0.00则相加
     public void keyboardClick(View view) {
         int id = view.getId();
         String text = (String) money.getText();
-        if (Objects.equals(text, "0.00")) {
-            text = "";
+        if (Objects.equals(text, "0.00") || Objects.equals(text, "0")) {
+            money.setText("");
         }
         if (id == num_list.get(0).getId()) {
-            text = text + (String) num_list.get(0).getText();
-            System.out.println("点击了:" + text + "");
-            money.setText(text);
+            setMoney((String) num_list.get(0).getText());
         } else if (id == num_list.get(1).getId()) {
-            text = text + (String) num_list.get(1).getText();
-            System.out.println("点击了:" + text + "");
-            money.setText(text);
-        } else if (id == finish.getId()) {
-//        System.out.println("提交类别:"+type+"");
+            setMoney((String) num_list.get(1).getText());
+        } else if (id == num_list.get(2).getId()) {
+            setMoney((String) num_list.get(2).getText());
+        } else if (id == num_list.get(3).getId()) {
+            setMoney((String) num_list.get(3).getText());
+        } else if (id == num_list.get(4).getId()) {
+            setMoney((String) num_list.get(4).getText());
+        } else if (id == num_list.get(5).getId()) {
+            setMoney((String) num_list.get(5).getText());
+        } else if (id == num_list.get(6).getId()) {
+            setMoney((String) num_list.get(6).getText());
+        } else if (id == num_list.get(7).getId()) {
+            setMoney((String) num_list.get(7).getText());
+        } else if (id == num_list.get(8).getId()) {
+            setMoney((String) num_list.get(8).getText());
+        } else if (id == num_list.get(9).getId()) {
+            setMoney((String) num_list.get(9).getText());
+        } else if (id == node.getId()) {
+            setMoney(node.getText().toString());
+        } else if (id == clear.getId()) {
+            int length = money.getText().length() - 1;
+            String newMoney = money.getText().subSequence(0, length).toString();
+            if(newMoney.isEmpty()){
+                money.setText("0.00");
+            }else{
+                money.setText(newMoney);
+            }
+        }
+        // 保存操作
+        else if (id == finish.getId()) {
             dataRepository.insert(new AccountDataItem(money.getText().toString(), "服饰", remark_txt.getText().toString(), "2024-5-28", tabIndex));
             finish();
         } else if (id == save_continue.getId()) {
             dataRepository.insert(new AccountDataItem(money.getText().toString(), "服饰", remark_txt.getText().toString(), "2024-5-28", tabIndex));
         }
+    }
 
+    public void setMoney(String addMoney) {
+        money.setText(money.getText() + addMoney);
+        System.out.println("money:" + money.getText() + "");
     }
 
     public void submit(View view) {
         DataRepository dataRepository = new DataRepository(getApplicationContext());
 //        System.out.println("提交类别:"+type+"");
         dataRepository.insert(new AccountDataItem("789", "服饰", "第一条", "2024-5-28", tabIndex));
+    }
+
+    // todo:如何才能在连续点两次的情况下只输入一次？连续点两次加，会添加×
+    public void calculate(View view) {
+        int id = view.getId();
+        char endChar = money.getText().charAt(money.getText().length() - 1);
+        String newMoney = money.getText().toString();
+        // 如果最后一位是运算符，则修改成相反运算符，否则加上运算符
+        // 截掉最后一位运算符得到新值
+        if (endChar == '+' || endChar == '×' || endChar == '-'|| endChar == '÷') {
+            int length = money.getText().length() - 1;
+            newMoney = money.getText().subSequence(0, length).toString();
+            System.out.println("最后一位是运算符");
+        }
+        // 如果 newMoney和money的值不一样,说明前面有运算符且点击了运算符
+        if(newMoney != money.getText()){
+            System.out.println("前面一位是运算符，且点击了运算符");
+        }
+        // 说明这是第一次，或者前面一位是数字
+        else{
+            System.out.println("第一次，或者前面一位是数字");
+            isAdd = false;
+            isReduce = false;
+        }
+        if (id == add_x.getId()) {
+            isAdd = !isAdd;
+            if (isAdd) {
+                money.setText(newMoney + "+");
+            } else {
+                money.setText(newMoney + "×");
+            }
+        } else if (id == reduce_chu.getId()) {
+            isReduce = !isReduce;
+            if (isReduce) {
+                money.setText(newMoney + "-");
+            } else {
+                money.setText(newMoney + "÷");
+            }
+        }
     }
 }

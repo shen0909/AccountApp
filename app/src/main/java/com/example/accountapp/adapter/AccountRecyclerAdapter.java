@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.accountapp.R;
 import com.example.accountapp.data.AccountData;
 import java.util.List;
-
-public class AccountRecyclAdapter extends RecyclerView.Adapter<AccountRecyclAdapter.ViewHolder> {
+// 帐单列表 RecyclerAdapter
+public class AccountRecyclerAdapter extends RecyclerView.Adapter<AccountRecyclerAdapter.ViewHolder> {
     List<AccountData> list; //数据
     Context context;
 
     // 构造函数
-    public AccountRecyclAdapter(List<AccountData> list,Context context) {
+    public AccountRecyclerAdapter(List<AccountData> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -38,13 +38,13 @@ public class AccountRecyclAdapter extends RecyclerView.Adapter<AccountRecyclAdap
     }
     @NonNull
     @Override
-    public AccountRecyclAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AccountRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.account_list_item,parent,false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AccountRecyclAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AccountRecyclerAdapter.ViewHolder holder, int position) {
         holder.date_tv.setText(list.get(position).getCreateDate());
 
         LinearLayout linearLayout = new LinearLayout(context);

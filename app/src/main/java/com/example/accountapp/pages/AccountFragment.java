@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.accountapp.R;
-import com.example.accountapp.adapter.AccountRecyclAdapter;
+import com.example.accountapp.adapter.AccountRecyclerAdapter;
 import com.example.accountapp.data.Model.AccountViewModel;
 import com.example.accountapp.data.AccountData;
 import com.example.accountapp.data.Entry.AccountDataItem;
@@ -25,7 +25,7 @@ import java.util.List;
 public class AccountFragment extends Fragment {
     private List<AccountDataItem> accountDataItemList = new ArrayList<>();
     private AccountViewModel accountViewModel;
-    private AccountRecyclAdapter accountRecyclAdapter;
+    private AccountRecyclerAdapter accountRecyclAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,7 +74,7 @@ public class AccountFragment extends Fragment {
 
         list.add(new AccountData("110",listItem));
         list.add(new AccountData("330",listItem));
-        accountRecyclAdapter = new AccountRecyclAdapter(list,getContext());
+        accountRecyclAdapter = new AccountRecyclerAdapter(list,getContext());
         recyclerView.setAdapter(accountRecyclAdapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
