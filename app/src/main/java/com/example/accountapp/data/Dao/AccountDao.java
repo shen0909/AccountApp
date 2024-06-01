@@ -16,8 +16,13 @@ public interface AccountDao{
     @Update
     void update(AccountDataItem AccountDataItem);
 
+    // 删除一条数据
     @Delete
     void delete(AccountDataItem AccountDataItem);
+
+    // 删除所有数据
+    @Query("DELETE FROM AccountListItemTable")
+    void deleteAll();
 
     @Query("SELECT * FROM AccountListItemTable")
     LiveData<List<AccountDataItem>> getAllData();
