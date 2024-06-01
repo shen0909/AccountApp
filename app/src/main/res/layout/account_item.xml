@@ -11,12 +11,13 @@
     <androidx.cardview.widget.CardView
         android:layout_width="30dp"
         android:layout_height="30dp"
-        app:cardPreventCornerOverlap="false"
+        app:cardBackgroundColor="@color/money_green"
+        app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="false"
-        app:cardCornerRadius="40dp">
+        app:cardCornerRadius="15dp">
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:scaleType="centerCrop"
             android:src="@drawable/canyin_unselect"/>
     </androidx.cardview.widget.CardView>
