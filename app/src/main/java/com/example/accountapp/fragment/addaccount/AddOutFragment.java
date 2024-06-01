@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.example.accountapp.InterfaceCollection;
 import com.example.accountapp.R;
 import com.example.accountapp.adapter.AddAccountIcomRecycleyAdapter;
 import com.example.accountapp.data.AddIconItemData;
@@ -19,7 +20,12 @@ import com.example.accountapp.pages.AddAccount;
 import java.util.List;
 
 // 添加账单-支出Fragment
-public class AddOutFragment extends Fragment{
+public class AddOutFragment extends Fragment implements InterfaceCollection.ChooseIcon {
+    @Override
+    public void showChoose(AddIconItemData chooseItem) {
+        System.out.println("点击了"+chooseItem);
+        ((AddAccount)requireActivity()).receiveChooseIcon(chooseItem);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -41,7 +47,7 @@ public class AddOutFragment extends Fragment{
         List<AddIconItemData> addIconItemDataList = new AllData().getAddIconOutDataList();
         System.out.println(addIconItemDataList.size());
 
-        AddAccountIcomRecycleyAdapter adapter = new AddAccountIcomRecycleyAdapter(new AllData().getAddIconOutDataList(), getContext(), new AddAccount(),0);
+        AddAccountIcomRecycleyAdapter adapter = new AddAccountIcomRecycleyAdapter(new AllData().getAddIconOutDataList(), getContext(), this, 0);
         recyclerView.setAdapter(adapter); //设置适配器
     }
 }

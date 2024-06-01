@@ -25,7 +25,7 @@ import java.util.List;
 public class AccountFragment extends Fragment {
     private List<AccountDataItem> accountDataItemList = new ArrayList<>();
     private AccountViewModel accountViewModel;
-    private AccountRecyclerAdapter accountRecyclAdapter;
+    private AccountRecyclerAdapter accountRecyclerAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,8 +74,8 @@ public class AccountFragment extends Fragment {
 
         list.add(new AccountData("110",listItem));
         list.add(new AccountData("330",listItem));
-        accountRecyclAdapter = new AccountRecyclerAdapter(list,getContext());
-        recyclerView.setAdapter(accountRecyclAdapter);
+        accountRecyclerAdapter = new AccountRecyclerAdapter(list,getContext());
+        recyclerView.setAdapter(accountRecyclerAdapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
@@ -84,7 +84,7 @@ public class AccountFragment extends Fragment {
         list.add(new AccountData("22",accountDataItemList));
         list.add(new AccountData("32",accountDataItemList));
         list.add(new AccountData("42",accountDataItemList));
-        accountRecyclAdapter.updateData(list);
-        accountRecyclAdapter.notifyDataSetChanged();
+        accountRecyclerAdapter.updateData(list);
+        accountRecyclerAdapter.notifyDataSetChanged();
     }
 }

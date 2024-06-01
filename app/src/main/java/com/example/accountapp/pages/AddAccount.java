@@ -1,16 +1,15 @@
 package com.example.accountapp.pages;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.example.accountapp.InterfaceCollection;
 import com.example.accountapp.R;
 import com.example.accountapp.data.Entry.AccountDataItem;
 import com.example.accountapp.data.AddIconItemData;
@@ -18,14 +17,15 @@ import com.example.accountapp.data.Repository.DataRepository;
 import com.example.accountapp.fragment.addaccount.AddExchangeFragment;
 import com.example.accountapp.fragment.addaccount.AddInFragment;
 import com.example.accountapp.fragment.addaccount.AddOutFragment;
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 // 添加账单 Activity
-public class AddAccount extends AppCompatActivity implements InterfaceCollection.ChooseIcon {
-    private int tabIndex = 1; //当前选中的tab页 1.支出 2.收入 3.转账
+public class AddAccount extends AppCompatActivity{
+    private int tabIndex = 1; //当前选中的tab页 1.收入 2.支出 3.转账
     private TextView tab1, tab2, tab3;
     private TextView money, finish, save_continue, node, reduce_chu, add_x;
     private LinearLayout clear;
@@ -80,7 +80,7 @@ public class AddAccount extends AppCompatActivity implements InterfaceCollection
         int index = view.getId();
         if (index == R.id.tab1) {
             System.out.println("支出");
-            tabIndex = 1;
+            tabIndex = 2;
             divider1.setVisibility(View.INVISIBLE);
             divider2.setVisibility(View.VISIBLE);
             tab1.setBackgroundResource(R.drawable.selec_tab);
@@ -92,7 +92,7 @@ public class AddAccount extends AppCompatActivity implements InterfaceCollection
             fragmentTransaction.commit();
         } else if (index == R.id.tab2) {
             System.out.println("收入");
-            tabIndex = 2;
+            tabIndex = 1;
             divider1.setVisibility(View.INVISIBLE);
             divider2.setVisibility(View.INVISIBLE);
             tab2.setBackgroundResource(R.drawable.selec_tab);
@@ -115,12 +115,6 @@ public class AddAccount extends AppCompatActivity implements InterfaceCollection
             fragmentTransaction.replace(R.id.icon_frag, new AddExchangeFragment());
             fragmentTransaction.commit();
         }
-    }
-
-    /// 处理从RecycleView中得到的数据
-    public void showChoose(AddIconItemData chooseItem) {
-        type = chooseItem.getTitle();
-        System.out.println(type);
     }
 
     // money == 0.00 归零  不等于 0.00则相加
@@ -162,10 +156,10 @@ public class AddAccount extends AppCompatActivity implements InterfaceCollection
         }
         // 保存操作
         else if (id == finish.getId()) {
-            dataRepository.insert(new AccountDataItem(money.getText().toString(), "服饰", remark_txt.getText().toString(), "2024-5-28", tabIndex));
+            submit();
             finish();
         } else if (id == save_continue.getId()) {
-            dataRepository.insert(new AccountDataItem(money.getText().toString(), "服饰", remark_txt.getText().toString(), "2024-5-28", tabIndex));
+            submit();
         }
     }
 
@@ -175,10 +169,15 @@ public class AddAccount extends AppCompatActivity implements InterfaceCollection
         System.out.println("money:" + money.getText() + "");
     }
 
-    public void submit(View view) {
+    // 提交账单
+    public void submit() {
         DataRepository dataRepository = new DataRepository(getApplicationContext());
-//        System.out.println("提交类别:"+type+"");
-        dataRepository.insert(new AccountDataItem("789", "服饰", "第一条", "2024-5-28", tabIndex));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(System.currentTimeMillis());
+        String s = simpleDateFormat.format(date);
+        AccountDataItem accountDataItem = new AccountDataItem(money.getText().toString(), type, "第一条", s, tabIndex);
+        Log.d(TAG, "添加的数据: " + accountDataItem);
+        dataRepository.insert(accountDataItem);
     }
 
     // todo:如何才能在连续点两次的情况下只输入一次？连续点两次加，会添加×
@@ -207,9 +206,16 @@ public class AddAccount extends AppCompatActivity implements InterfaceCollection
             money.setText(newMoney + (isReduce ? "-" : "÷"));
         }
     }
+
     /// 删除最后一个字符
     public String cancelEndChar(String string){
         int length = string.length() - 1;
         return string.subSequence(0, length).toString();
+    }
+    /// 接受 ReycleView选择的icon
+    public void receiveChooseIcon(AddIconItemData chooseItem){
+        type = chooseItem.getTitle();
+        System.out.println("type:"+type);
+
     }
 }

@@ -21,13 +21,13 @@ public class AddAccountIcomRecycleyAdapter extends RecyclerView.Adapter<AddAccou
     private final List<AddIconItemData> addIconItemDataList;
     private final Context context;
     private int selecPosition = 0; //当前选中的位序
-    private final InterfaceCollection.ChooseIcon chooseIcon;
+    private final InterfaceCollection.ChooseIcon chooseIconLisener;
     private int currencyType; // 0-支出 1-收入
 
-    public AddAccountIcomRecycleyAdapter(List<AddIconItemData> addIconItemDataList, Context context,InterfaceCollection.ChooseIcon chooseIcon,int currencyType) {
+    public AddAccountIcomRecycleyAdapter(List<AddIconItemData> addIconItemDataList, Context context,InterfaceCollection.ChooseIcon chooseIconLisener,int currencyType) {
         this.addIconItemDataList = addIconItemDataList;
         this.context = context;
-        this.chooseIcon = chooseIcon;
+        this.chooseIconLisener = chooseIconLisener;
         this.currencyType = currencyType;
     }
 
@@ -38,7 +38,7 @@ public class AddAccountIcomRecycleyAdapter extends RecyclerView.Adapter<AddAccou
         ViewHolder holder = new ViewHolder(view);
         holder.icon.setOnClickListener(view1 -> {
             selecPosition = holder.getAdapterPosition(); // 传出点击位置
-            chooseIcon.showChoose(addIconItemDataList.get(selecPosition));
+            chooseIconLisener.showChoose(addIconItemDataList.get(selecPosition));
             notifyDataSetChanged();
         });
         return holder;
