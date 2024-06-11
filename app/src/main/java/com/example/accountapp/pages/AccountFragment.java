@@ -30,15 +30,24 @@ public class AccountFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         accountViewModel = new AccountViewModel(getActivity().getApplication());
-        accountViewModel.getListLiveData().observe(getViewLifecycleOwner(), new Observer<List<AccountDataItem>>() {
+//        accountViewModel.getListLiveData().observe(getViewLifecycleOwner(), new Observer<List<AccountDataItem>>() {
+//            @Override
+//            public void onChanged(List<AccountDataItem> accountDataItems) {
+//                accountDataItemList = accountDataItems;
+//                updateRecycleView();
+//                System.out.println("数据更新了"+accountDataItems.size());
+//            }
+//        });
+        // todo：
+        accountViewModel.getListLiveData().observe(getViewLifecycleOwner(), new Observer<List<AccountData>>() {
             @Override
-            public void onChanged(List<AccountDataItem> accountDataItems) {
-                accountDataItemList = accountDataItems;
-                updateRecycleView();
-                System.out.println("数据更新了"+accountDataItems.size());
+            public void onChanged(List<AccountData> accountData) {
+                System.out.println("数据更新了"+accountData.size());
+                for (int i = 0; i < accountData.size() ; i++) {
+                    System.out.println("账单数据"+accountData.get(i).toString());
+                }
             }
         });
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_account, container, false);
     }
 

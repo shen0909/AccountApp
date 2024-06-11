@@ -5,14 +5,16 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import com.example.accountapp.data.Dao.AccountDao;
+import com.example.accountapp.data.Dao.AccountListDao;
 import com.example.accountapp.data.Entry.AccountDataItem;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {AccountDataItem.class},version = 1,exportSchema = false)
+@Database(entities = {AccountDataItem.class, AccountData.class},version = 3,exportSchema = false)
 public abstract class AppRoomDataBase extends RoomDatabase {
     private static volatile AppRoomDataBase INSTANCE;
     public abstract AccountDao accountDao();
+    public abstract AccountListDao accountListDao();
 
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(4);
     // 单例模式
@@ -25,6 +27,7 @@ public abstract class AppRoomDataBase extends RoomDatabase {
                                     AppRoomDataBase.class,
                                     "记账数据库"
                             )
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }

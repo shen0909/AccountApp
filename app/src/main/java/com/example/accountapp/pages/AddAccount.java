@@ -11,8 +11,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.accountapp.R;
+import com.example.accountapp.data.AccountData;
 import com.example.accountapp.data.Entry.AccountDataItem;
 import com.example.accountapp.data.AddIconItemData;
+import com.example.accountapp.data.Model.AccountViewModel;
 import com.example.accountapp.data.Repository.DataRepository;
 import com.example.accountapp.fragment.addaccount.AddExchangeFragment;
 import com.example.accountapp.fragment.addaccount.AddInFragment;
@@ -24,7 +26,7 @@ import java.util.List;
 import java.util.Objects;
 
 // 添加账单 Activity
-public class AddAccount extends AppCompatActivity{
+public class AddAccount extends AppCompatActivity {
     private int tabIndex = 1; //当前选中的tab页 1.收入 2.支出 3.转账
     private TextView tab1, tab2, tab3;
     private TextView money, finish, save_continue, node, reduce_chu, add_x;
@@ -36,6 +38,8 @@ public class AddAccount extends AppCompatActivity{
     private DataRepository dataRepository;
     private Boolean isAdd = false; // 初始是加号
     private Boolean isReduce = false;
+    private AccountViewModel accountViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,7 @@ public class AddAccount extends AppCompatActivity{
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();//开启事务
         fragmentTransaction.add(R.id.icon_frag, new AddOutFragment());
         fragmentTransaction.commit();
+        accountViewModel = new AccountViewModel(getApplication());
     }
 
     // 初始化view
@@ -171,13 +176,20 @@ public class AddAccount extends AppCompatActivity{
 
     // 提交账单
     public void submit() {
-        DataRepository dataRepository = new DataRepository(getApplicationContext());
+//        DataRepository dataRepository = new DataRepository(getApplicationContext());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat_list = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(System.currentTimeMillis());
-        String s = simpleDateFormat.format(date);
-        AccountDataItem accountDataItem = new AccountDataItem(money.getText().toString(), type, "第一条", s, tabIndex);
-        Log.d(TAG, "添加的数据: " + accountDataItem);
-        dataRepository.insert(accountDataItem);
+        String create_date_list = simpleDateFormat_list.format(date);
+        String create_date_item = simpleDateFormat.format(date);
+        List<AccountDataItem> accountDataItem = new ArrayList<>();
+        accountDataItem.add(new AccountDataItem(money.getText().toString(), type, remark_txt.getText().toString(), create_date_item, tabIndex));
+//        accountViewModel.
+        AccountData accountData = new AccountData(create_date_list,accountDataItem);
+        Log.d(TAG, "添加的账单数据: " + accountData.toString());
+//        dataRepository.deleteAllAccountList();
+//        dataRepository.insertList(accountData);
+//        dataRepository.deleteAll();
     }
 
     // todo:如何才能在连续点两次的情况下只输入一次？连续点两次加，会添加×
@@ -208,14 +220,15 @@ public class AddAccount extends AppCompatActivity{
     }
 
     /// 删除最后一个字符
-    public String cancelEndChar(String string){
+    public String cancelEndChar(String string) {
         int length = string.length() - 1;
         return string.subSequence(0, length).toString();
     }
+
     /// 接受 ReycleView选择的icon
-    public void receiveChooseIcon(AddIconItemData chooseItem){
+    public void receiveChooseIcon(AddIconItemData chooseItem) {
         type = chooseItem.getTitle();
-        System.out.println("type:"+type);
+        System.out.println("type:" + type);
 
     }
 }

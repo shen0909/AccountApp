@@ -3,13 +3,37 @@ package com.example.accountapp.data.Entry;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import com.example.accountapp.data.AccountData;
+
 // 账单数据类
-@Entity(tableName = "AccountListItemTable")
+// 关联 AccountData.class，主键是
+@Entity(tableName = "AccountListItemTable", foreignKeys = @ForeignKey(entity = AccountData.class, parentColumns = "list_id", childColumns = "outList_id"))
 public class AccountDataItem {
+    // 主键
     @PrimaryKey(autoGenerate = true)
-    private int id = 0;
+    private int item_id = 0;
+
+    public int getItem_id() {
+        return item_id;
+    }
+
+    public void setItem_id(int item_id) {
+        this.item_id = item_id;
+    }
+
+    private int outList_id; //外层列表的主键
+
+    public int getOutList_id() {
+        return outList_id;
+    }
+
+    public void setOutList_id(int outList_id) {
+        this.outList_id = outList_id;
+    }
+
     private String money; // 账单金额
     private String type; // 消费类别 -餐饮类
     private String detail; // 消费详情(备注)
@@ -22,14 +46,6 @@ public class AccountDataItem {
         this.detail = detail;
         this.data = data;
         this.in = in;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getMoney() {
@@ -72,9 +88,17 @@ public class AccountDataItem {
         this.in = in;
     }
 
+//    public int getOutList_id() {
+//        return outList_id;
+//    }
+//
+//    public void setOutList_id(int outList_id) {
+//        this.outList_id = outList_id;
+//    }
+
     @NonNull
     @Override
     public String toString() {
-        return getId()+"  "+getDetail()+"  "+getMoney()+"  "+getType();
+        return "ID：" + getItem_id() + "\t备注：" + getDetail() + "\t金额：" + getMoney() + "\t类型：" + getType() + "\t方向：" + (getIn() == 1 ? "收入" : "支出");
     }
 }
