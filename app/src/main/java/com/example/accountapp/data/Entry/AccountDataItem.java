@@ -10,7 +10,7 @@ import com.example.accountapp.data.AccountData;
 
 // 账单数据类
 // 关联 AccountData.class，主键是
-@Entity(tableName = "AccountListItemTable", foreignKeys = @ForeignKey(entity = AccountData.class, parentColumns = "list_id", childColumns = "outList_id"))
+@Entity(tableName = "AccountListItemTable")
 public class AccountDataItem {
     // 主键
     @PrimaryKey(autoGenerate = true)
@@ -99,6 +99,6 @@ public class AccountDataItem {
     @NonNull
     @Override
     public String toString() {
-        return "ID：" + getItem_id() + "\t备注：" + getDetail() + "\t金额：" + getMoney() + "\t类型：" + getType() + "\t方向：" + (getIn() == 1 ? "收入" : "支出");
+        return "ID：" + getItem_id() + "\t备注：" + getDetail() + "\t金额：" + getMoney() + "\t类型：" + getType() + "\t方向：" + (getIn() == 1 ? "收入" : "支出" )+ "\t外键" + getOutList_id();
     }
 }

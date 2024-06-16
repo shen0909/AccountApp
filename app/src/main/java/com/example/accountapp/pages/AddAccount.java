@@ -27,13 +27,13 @@ import java.util.Objects;
 
 // 添加账单 Activity
 public class AddAccount extends AppCompatActivity {
-    private int tabIndex = 1; //当前选中的tab页 1.收入 2.支出 3.转账
+    private int tabIndex = 2; //当前选中的tab页 1.收入 2.支出 3.转账
     private TextView tab1, tab2, tab3;
     private TextView money, finish, save_continue, node, reduce_chu, add_x;
     private LinearLayout clear;
     private EditText remark_txt;
     private View divider1, divider2;
-    private String type;
+    private String type = "餐饮";
     private List<TextView> num_list = new ArrayList<>();
     private DataRepository dataRepository;
     private Boolean isAdd = false; // 初始是加号
@@ -52,7 +52,7 @@ public class AddAccount extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();//开启事务
         fragmentTransaction.add(R.id.icon_frag, new AddOutFragment());
         fragmentTransaction.commit();
-        accountViewModel = new AccountViewModel(getApplication());
+        accountViewModel = new AccountViewModel(getApplication(),this);
     }
 
     // 初始化view
@@ -159,37 +159,22 @@ public class AddAccount extends AppCompatActivity {
                 money.setText(newMoney);
             }
         }
-        // 保存操作
+        // 保存再记操作
         else if (id == finish.getId()) {
             submit();
             finish();
         } else if (id == save_continue.getId()) {
-            submit();
+            saveAndContinue();
         }
+    }
+    public void saveAndContinue(){
+        submit();
+        money.setText("0.00");
     }
 
     /// 点击数字键盘修改金钱
     public void setMoney(String addMoney) {
         money.setText(money.getText() + addMoney);
-        System.out.println("money:" + money.getText() + "");
-    }
-
-    // 提交账单
-    public void submit() {
-//        DataRepository dataRepository = new DataRepository(getApplicationContext());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat simpleDateFormat_list = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date(System.currentTimeMillis());
-        String create_date_list = simpleDateFormat_list.format(date);
-        String create_date_item = simpleDateFormat.format(date);
-        List<AccountDataItem> accountDataItem = new ArrayList<>();
-        accountDataItem.add(new AccountDataItem(money.getText().toString(), type, remark_txt.getText().toString(), create_date_item, tabIndex));
-//        accountViewModel.
-        AccountData accountData = new AccountData(create_date_list,accountDataItem);
-        Log.d(TAG, "添加的账单数据: " + accountData.toString());
-//        dataRepository.deleteAllAccountList();
-//        dataRepository.insertList(accountData);
-//        dataRepository.deleteAll();
     }
 
     // todo:如何才能在连续点两次的情况下只输入一次？连续点两次加，会添加×
@@ -228,7 +213,21 @@ public class AddAccount extends AppCompatActivity {
     /// 接受 ReycleView选择的icon
     public void receiveChooseIcon(AddIconItemData chooseItem) {
         type = chooseItem.getTitle();
-        System.out.println("type:" + type);
+
+    }
+
+    // 提交账单
+    public void submit() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat_list = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date(System.currentTimeMillis());
+        String create_date_list = simpleDateFormat_list.format(date);
+        String create_date_item = simpleDateFormat.format(date);
+
+        List<AccountDataItem> accountDataItemList = new ArrayList<>();
+        AccountDataItem accountDataItem = new AccountDataItem(money.getText().toString(), type, remark_txt.getText().toString(), create_date_item, tabIndex);
+        accountDataItemList.add(accountDataItem);
+        accountViewModel.insertAccountItem(accountDataItem,this);
 
     }
 }

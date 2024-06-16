@@ -21,13 +21,13 @@ public class AccountListItemRecycle extends RecyclerView.Adapter<AccountListItem
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.account_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.account_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        System.out.println("binding数据："+accountDataItemList.get(position));
+        System.out.println("binding数据：" + accountDataItemList.get(position));
         holder.detailMoney.setText(accountDataItemList.get(position).getMoney());
         holder.type_tv.setText(accountDataItemList.get(position).getType());
         holder.detail.setText(accountDataItemList.get(position).getDetail());
@@ -35,12 +35,17 @@ public class AccountListItemRecycle extends RecyclerView.Adapter<AccountListItem
 
     @Override
     public int getItemCount() {
+        // 检查列表是否为 null
+        if (accountDataItemList == null) {
+            return 0;  // 如果列表为 null，则返回 0，表示没有项目要显示
+        }
         return accountDataItemList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView detailMoney,type_tv,detail;
+        private TextView detailMoney, type_tv, detail;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             detailMoney = itemView.findViewById(R.id.detial_money);

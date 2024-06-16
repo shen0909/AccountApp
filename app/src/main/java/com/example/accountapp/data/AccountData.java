@@ -21,14 +21,14 @@ import java.util.List;
 //@Entity(tableName = "AccountDataTable", foreignKeys = @ForeignKey(entity = AccountDataItem.class, childColumns = "item_id", parentColumns = "id"))
 public class AccountData {
     // 主键：如果日期一样，那就是添加不是修改
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "list_id")
     private int id; //主键
     private String createDate; //账单创建时间
-    private double outMoney; //支出金额
-    private double inMoney; //收入金额
+    private String outMoney; //支出金额
+    private String inMoney; //收入金额
 
-//    @Relation(parentColumn = "id", entityColumn = "item_id")
+    //    @Relation(parentColumn = "id", entityColumn = "item_id")
     //    @Embedded
     @Ignore
     private List<AccountDataItem> accountList;
@@ -47,23 +47,8 @@ public class AccountData {
     public AccountData(String time, List<AccountDataItem> accountList) {
         this.createDate = time;
         this.accountList = accountList;
-        getMoney();
     }
 
-    // 获得总额
-    private void getMoney() {
-        this.inMoney = 100;
-        this.outMoney = 0;
-//        for (int i = 0; i < accountList.size(); i++) {
-//            AccountDataItem accountDataItem = this.accountList.get(i);
-//            // 当前是收入金额
-//            if(accountDataItem.getIn() == 0){
-//                this.inMoney += Double.parseDouble(accountDataItem.getMoney());
-//            }else {
-//                this.outMoney += Double.parseDouble(accountDataItem.getMoney());
-//            }
-//        }
-    }
 
     public String getCreateDate() {
         return createDate;
@@ -73,19 +58,19 @@ public class AccountData {
         this.createDate = createDate;
     }
 
-    public double getOutMoney() {
+    public String getOutMoney() {
         return outMoney;
     }
 
-    public void setOutMoney(double outMoney) {
+    public void setOutMoney(String outMoney) {
         this.outMoney = outMoney;
     }
 
-    public double getInMoney() {
+    public String getInMoney() {
         return inMoney;
     }
 
-    public void setInMoney(double inMoney) {
+    public void setInMoney(String inMoney) {
         this.inMoney = inMoney;
     }
 
@@ -100,17 +85,6 @@ public class AccountData {
     @NonNull
     @Override
     public String toString() {
-        if (getAccountList() == null || getAccountList().size() == 0) {
-            return "AccountData{" +
-                    "id='" + id + '\'' +
-                    '}';
-        } else {
-            return "AccountData {" +
-                    "id='" + id + '\'' +
-                    ", accountDataItemList=" + getAccountList().toString() +
-                    '}';
-        }
-//        System.out.println("ID:" + getId() + "\t日期" + getCreateDate() + "\t具体账单" + getAccountList().size());
-//        return super.toString();
+        return "ID:" + getId() + "\t日期：" + getCreateDate() + "\t收入金额：" + getInMoney() + "\t支出金额：" + getOutMoney();
     }
 }

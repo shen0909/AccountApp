@@ -29,6 +29,6 @@ public interface AccountDao{
     @Query("SELECT * FROM AccountListItemTable")
     LiveData<List<AccountDataItem>> getAllData();
 
-    @Query("SELECT * FROM AccountListItemTable WHERE item_id = :id")
-    List<AccountDataItem> getDataByForId(int id);
+    @Query("SELECT * FROM AccountListItemTable WHERE outList_id = :id ORDER BY data DESC")
+    LiveData<List<AccountDataItem>> getDataByForId(int id);
 }
