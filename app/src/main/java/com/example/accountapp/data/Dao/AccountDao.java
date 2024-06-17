@@ -2,7 +2,6 @@ package com.example.accountapp.data.Dao;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
-import androidx.room.ForeignKey;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -26,9 +25,9 @@ public interface AccountDao{
     @Query("DELETE FROM AccountListItemTable")
     void deleteAll();
 
-    @Query("SELECT * FROM AccountListItemTable")
+    @Query("SELECT * FROM AccountListItemTable ORDER BY datetime(data) DESC")
     LiveData<List<AccountDataItem>> getAllData();
 
-    @Query("SELECT * FROM AccountListItemTable WHERE outList_id = :id ORDER BY data DESC")
+    @Query("SELECT * FROM AccountListItemTable WHERE outList_id = :id ORDER BY datetime(data) DESC")
     LiveData<List<AccountDataItem>> getDataByForId(int id);
 }
