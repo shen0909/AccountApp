@@ -32,6 +32,18 @@ public class AccountFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         accountViewModel = new AccountViewModel(getActivity().getApplication(), this);
+        return inflater.inflate(R.layout.fragment_account, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initView();
+        listenerDateChange();
+    }
+
+    /// 观察LiveData ,处理数据
+    private void listenerDateChange() {
         accountViewModel.getListLiveData().observe(getViewLifecycleOwner(), new Observer<List<AccountData>>() {
             @Override
             public void onChanged(List<AccountData> accountData) {
@@ -46,6 +58,8 @@ public class AccountFragment extends Fragment {
                     }
                     // 有外键 = id的，添加到
                     else {
+                        // 清空currentItemList列表
+                        currentItemList.clear();
                         for (int j = 0; j < accountDataItemList1.size(); j++) {
                             currentItemList.add(accountDataItemList1.get(j));
                             Log.e("有符合条件的列表项", accountDataItemList1.get(j).toString());
@@ -63,13 +77,14 @@ public class AccountFragment extends Fragment {
             @Override
             public void onChanged(List<AccountDataItem> accountDataItems) {
                 Log.d("数据更新", "账单列表项更新了,列表长度" + (currentDataList.size() + 1));
-                List<AccountDataItem> combine = new ArrayList<>();
                 for (int i = 0; i < currentDataList.size(); i++) {
+
+                    List<AccountDataItem> combine = new ArrayList<>();
                     int list_id = currentDataList.get(i).getId();
                     for (int j = 0; j < accountDataItems.size(); j++) {
                         Log.d("打印账单列表项", accountDataItems.get(j).toString());
-                        if (list_id == accountDataItems.get(i).getOutList_id()) {
-                            combine.add(accountDataItems.get(i));
+                        if (list_id == accountDataItems.get(j).getOutList_id()) {
+                            combine.add(accountDataItems.get(j));
                         }
                     }
                     currentDataList.get(i).setAccountList(combine);
@@ -77,13 +92,6 @@ public class AccountFragment extends Fragment {
                 }
             }
         });
-        return inflater.inflate(R.layout.fragment_account, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initView();
     }
 
     private void initView() {
