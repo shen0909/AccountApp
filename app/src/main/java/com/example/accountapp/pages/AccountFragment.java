@@ -24,7 +24,6 @@ import java.util.List;
 
 // 账单 Fragment
 public class AccountFragment extends Fragment {
-    private List<AccountDataItem> currentItemList = new ArrayList<>();
     private List<AccountData> currentDataList = new ArrayList<>();
     private AccountViewModel accountViewModel;
     private AccountRecyclerAdapter accountRecyclerAdapter;
@@ -41,68 +40,38 @@ public class AccountFragment extends Fragment {
         initView();
         listenerDateChange();
     }
+    /// 传入最近的账单列表和列表项列表，取出合适的放入
+    private void updateDataList(List<AccountData> accountData, List<AccountDataItem> accountDataItems) {
+        if (accountData == null || accountDataItems == null) {
+            return;
+        }
+        for (int i = 0; i < accountData.size(); i++) {
+            List<AccountDataItem> combine = new ArrayList<>();
+            int list_id = accountData.get(i).getId();
+            for (int j = 0; j < accountDataItems.size(); j++) {
+                if (list_id == accountDataItems.get(j).getOutList_id()) {
+                    combine.add(accountDataItems.get(j));
+                }
+            }
+            accountData.get(i).setAccountList(combine);
+        }
+        currentDataList = accountData;
+        updateRecycleView();
+    }
 
     /// 观察LiveData ,处理数据
     private void listenerDateChange() {
-        accountViewModel.getListLiveData().observe(getViewLifecycleOwner(), new Observer<List<AccountData>>() {
-            @Override
-            public void onChanged(List<AccountData> accountData) {
-                // 遍历，每一个列表，获取所有的适配的列表项列表
-                for (int i = 0; i < accountData.size(); i++) {
-                    int id = accountData.get(i).getId();
-                    List<AccountDataItem> accountDataItemList1 = accountViewModel.getDataByForId(id);
-
-                    // 为什么这里没有符合条件的列表项呢
-                    if (accountDataItemList1.isEmpty() || accountDataItemList1 == null) {
-                        Log.e("监听是否有符合条件的列表项", "没有");
-                    }
-                    // 有外键 = id的，添加到
-                    else {
-                        // 清空currentItemList列表
-                        currentItemList.clear();
-                        for (int j = 0; j < accountDataItemList1.size(); j++) {
-                            currentItemList.add(accountDataItemList1.get(j));
-                            Log.e("有符合条件的列表项", accountDataItemList1.get(j).toString());
-
-                        }
-                        accountData.get(i).setAccountList(currentItemList);
-                    }
-                }
-                // 将获取到的值赋值给变量
-                currentDataList = accountData;
-                updateRecycleView();
-            }
-        });
-        accountViewModel.getAccountItemLiveData().observe(getViewLifecycleOwner(), new Observer<List<AccountDataItem>>() {
-            @Override
-            public void onChanged(List<AccountDataItem> accountDataItems) {
-                Log.d("数据更新", "账单列表项更新了,列表长度" + (currentDataList.size() + 1));
-                for (int i = 0; i < currentDataList.size(); i++) {
-
-                    List<AccountDataItem> combine = new ArrayList<>();
-                    int list_id = currentDataList.get(i).getId();
-                    for (int j = 0; j < accountDataItems.size(); j++) {
-                        Log.d("打印账单列表项", accountDataItems.get(j).toString());
-                        if (list_id == accountDataItems.get(j).getOutList_id()) {
-                            combine.add(accountDataItems.get(j));
-                        }
-                    }
-                    currentDataList.get(i).setAccountList(combine);
-                    updateRecycleView();
-                }
-            }
+        accountViewModel.getListLiveData().observe(getViewLifecycleOwner(), accountData -> updateDataList(accountData,accountViewModel.getAccountItemLiveData().getValue()));
+        accountViewModel.getAccountItemLiveData().observe(getViewLifecycleOwner(), accountDataItems -> {
+            Log.d("数据更新", "账单列表项更新了,列表长度" + (currentDataList.size() + 1));
+            updateDataList(accountViewModel.getListLiveData().getValue(), accountDataItems);
         });
     }
 
     private void initView() {
         initRecycleView();
         FloatingActionButton floatingActionButton = getView().findViewById(R.id.floatActionButton);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getContext(), AddAccount.class));
-            }
-        });
+        floatingActionButton.setOnClickListener(view -> startActivity(new Intent(getContext(), AddAccount.class)));
     }
 
     private void initRecycleView() {
