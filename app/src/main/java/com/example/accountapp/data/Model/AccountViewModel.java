@@ -11,10 +11,8 @@ import androidx.lifecycle.Observer;
 import com.example.accountapp.data.AccountData;
 import com.example.accountapp.data.Repository.DataRepository;
 import com.example.accountapp.data.Entry.AccountDataItem;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import com.example.accountapp.utils.CommonTool;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class AccountViewModel extends AndroidViewModel {
@@ -23,6 +21,7 @@ public class AccountViewModel extends AndroidViewModel {
     private LiveData<List<AccountData>> listLiveData;
     private LifecycleOwner lifecycleOwner;
     private List<AccountDataItem> accountDataItemList;
+    private CommonTool commonTool = new CommonTool();
 
 
     public AccountViewModel(@NonNull Application application, LifecycleOwner lifecycleOwner) {
@@ -66,23 +65,11 @@ public class AccountViewModel extends AndroidViewModel {
         dataRepository.insertList(accountData);
     }
 
-    public String dealDate(String dealDate) {
-        // 设置日期
-        SimpleDateFormat fullDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date date = fullDateFormat.parse(dealDate);
-            return dateFormat.format(date);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     /// 创建一个新的列表
     private void createNewAccount(AccountDataItem accountDataItem, int length) {
         AccountData newAccountData = new AccountData();
         newAccountData.setId(length);
-        newAccountData.setCreateDate(dealDate(accountDataItem.getData()));
+        newAccountData.setCreateDate(commonTool.dealDate(accountDataItem.getData(),1));
         // 设置金额 1-收入 2-支出
         if (accountDataItem.getIn() == 1) {
             newAccountData.setInMoney(accountDataItem.getMoney());
@@ -111,12 +98,12 @@ public class AccountViewModel extends AndroidViewModel {
                 else {
                     for (int i = 0; i < accountData.size(); i++) {
                         if (accountDataItem.getData().contains(accountData.get(i).getCreateDate())) {
-                            Log.e("当前有列表数据", "日期相等：列表日期-" + accountData.get(i).getCreateDate() + "\t列表项日期-" + dealDate(accountDataItem.getData()));
+                            Log.e("当前有列表数据", "日期相等：列表日期-" + accountData.get(i).getCreateDate() + "\t列表项日期-" + commonTool.dealDate(accountDataItem.getData(),1));
                             Log.d(TAG, "添加的Item账单数据agin: " + accountDataItem.toString());
                             accountDataItem.setOutList_id(accountData.get(i).getId());
                             dataRepository.insertAccountItem(accountDataItem);
                         } else {
-                            Log.e("tixing", "日期不相等：列表日期-" + accountData.get(i).getCreateDate() + "\t列表项日期-" + dealDate(accountDataItem.getData()));
+                            Log.e("tixing", "日期不相等：列表日期-" + accountData.get(i).getCreateDate() + "\t列表项日期-" + commonTool.dealDate(accountDataItem.getData(),1));
                             // 此时日期不相等，说明当前列表不存在，所以需要新建
                             createNewAccount(accountDataItem, accountData.size() + 1);
                         }
