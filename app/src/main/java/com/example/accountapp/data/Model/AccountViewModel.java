@@ -22,6 +22,7 @@ public class AccountViewModel extends AndroidViewModel {
     private LifecycleOwner lifecycleOwner;
     private List<AccountDataItem> accountDataItemList;
     private CommonTool commonTool = new CommonTool();
+    private LiveData<List<AccountData>> combineList;
 
 
     public AccountViewModel(@NonNull Application application, LifecycleOwner lifecycleOwner) {
@@ -30,6 +31,11 @@ public class AccountViewModel extends AndroidViewModel {
         accountItemLiveData = dataRepository.getData();
         listLiveData = dataRepository.getListLiveData();
         this.lifecycleOwner = lifecycleOwner;
+        this.combineList = dataRepository.dealBackData();
+    }
+
+    public LiveData<List<AccountData>> getCombineList(){
+        return combineList;
     }
 
     /// 获取账单列表数据 -- LiveData
@@ -62,7 +68,7 @@ public class AccountViewModel extends AndroidViewModel {
 
     /// 插入账单列表数据
     public void insertList(AccountData accountData) {
-        dataRepository.insertList(accountData);
+        dataRepository.insert(accountData);
     }
 
     /// 创建一个新的列表
@@ -80,13 +86,14 @@ public class AccountViewModel extends AndroidViewModel {
         accountDataItem.setOutList_id(length);
         Log.d(TAG, "添加的Item账单数据agin: " + accountDataItem.toString());
         insertList(newAccountData);
-        dataRepository.insertAccountItem(accountDataItem);
+        dataRepository.dealInsert(accountDataItem);
     }
 
     /// 插入账单item数据
     public void insertAccountItem(AccountDataItem accountDataItem, LifecycleOwner lifecycleOwner) {
         Log.d(TAG, "添加的Item账单数据: " + accountDataItem.toString());
-        getListLiveData().observe(lifecycleOwner, new Observer<List<AccountData>>() {
+        dataRepository.dealInsert(accountDataItem);
+       /* getListLiveData().observe(lifecycleOwner, new Observer<List<AccountData>>() {
             @Override
             public void onChanged(List<AccountData> accountData) {
                 //todo:当前没有列表数据，创建一个列表数据，并将列表数据的主键赋值给item的外键
@@ -110,8 +117,7 @@ public class AccountViewModel extends AndroidViewModel {
                     }
                 }
             }
-        });
-
+        });*/
     }
 
     public void deleteAllList() {

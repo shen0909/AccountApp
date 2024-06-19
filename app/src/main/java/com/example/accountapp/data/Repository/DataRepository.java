@@ -1,12 +1,16 @@
 package com.example.accountapp.data.Repository;
 
 import android.content.Context;
+import android.util.Log;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import com.example.accountapp.data.AccountData;
 import com.example.accountapp.data.AppRoomDataBase;
 import com.example.accountapp.data.Dao.AccountDao;
 import com.example.accountapp.data.Dao.AccountListDao;
 import com.example.accountapp.data.Entry.AccountDataItem;
+import com.example.accountapp.utils.CommonTool;
+import java.util.ArrayList;
 import java.util.List;
 
 // 数据存储库
@@ -16,6 +20,7 @@ public class DataRepository {
     private final AccountDao accountDao;
     private final AccountListDao accountListDao;
     private AppRoomDataBase appRoomDataBase;
+    private CommonTool commonTool = new CommonTool();
 
     public DataRepository(Context context) {
         appRoomDataBase = AppRoomDataBase.getDataBase(context);
@@ -26,13 +31,59 @@ public class DataRepository {
     /// 插入账单
     /// todo:如果要添加的这个账单时间日期和账单列表中的某一项相等，则将它的账单列表中的某一项的id赋值给这个账单的外键,
     /// todo:如果没有相等的，说明没有这个列表，则添加新的列表
-    public void insertAccountItem(AccountDataItem accountDataItem) {
-        appRoomDataBase.databaseWriteExecutor.execute(() -> accountDao.insertAccount(accountDataItem));
+    public void dealInsert(AccountDataItem accountDataItem) {
+        appRoomDataBase.databaseWriteExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<AccountData> accountDataList = accountListDao.getAllDataList();
+                /// todo:长度为0，说明当前没有数据，需要创建一条新的列表
+                if (accountDataList.size() == 0) {
+                    createNewList(1, accountDataItem);
+                }
+                /// todo:比对所有列表与当前列表项的创建日期
+                else {
+                    for (int i = 0; i < accountDataList.size(); i++) {
+                        AccountData nowAccountData = accountDataList.get(i);
+                        // 有：直接取出id,设置给当前列表项再插入
+                        if (accountDataItem.getData().contains(nowAccountData.getCreateDate())) {
+                            Log.e("当前有列表数据", "日期相等：列表日期-" + nowAccountData + "\t列表项日期-" + commonTool.dealDate(accountDataItem.getData(), 1));
+                            accountDataItem.setOutList_id(nowAccountData.getId());
+                            accountDao.insertAccount(accountDataItem);
+                        }
+                        // 无：创建一条新的列表和列表项
+                        else{
+                            createNewList(accountDataList.size(),accountDataItem);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void createNewList(int length, AccountDataItem accountDataItem) {
+        AccountData newAccountData = new AccountData();
+        newAccountData.setId(length);
+        newAccountData.setCreateDate(commonTool.dealDate(accountDataItem.getData(), 1));
+        // 设置金额 1-收入 2-支出
+        if (accountDataItem.getIn() == 1) {
+            newAccountData.setInMoney(accountDataItem.getMoney());
+        } else {
+            newAccountData.setOutMoney(accountDataItem.getMoney());
+        }
+        accountDataItem.setOutList_id(length);
+        Log.e("新建一条列表", "列表:" + newAccountData.toString() + "\n列表项:" + accountDataItem.toString());
+        accountListDao.insertAccountList(newAccountData);
+        accountDao.insertAccount(accountDataItem);
     }
 
     /// 插入账单列表
-    public void insertList(AccountData accountData) {
-        appRoomDataBase.databaseWriteExecutor.execute(() -> accountListDao.insertAccountList(accountData));
+    public void insert(AccountData accountData) {
+        appRoomDataBase.databaseWriteExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                accountListDao.insertAccountList(accountData);
+            }
+        });
     }
 
     // 获取账单列表
@@ -61,8 +112,27 @@ public class DataRepository {
 //        });
 //    }
 
+    /// 在这里处理合适的
+    public LiveData<List<AccountData>> dealBackData(){
+        MutableLiveData<List<AccountData>> combineDataList = new MutableLiveData<>();
+        appRoomDataBase.databaseWriteExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<AccountData> newAccountList = new ArrayList<>();
+                // 获取列表,根据每个列表的id获取列表项
+                List<AccountData> oldAccountList = accountListDao.getAllDataList();
+                for (int i = 0; i < oldAccountList.size(); i++) {
+                    AccountData oldAccountData = oldAccountList.get(i);
+                    List<AccountDataItem> accountDataItemList = accountDao.AccountListWithOutId(oldAccountData.getId());
+                    oldAccountData.setAccountList(accountDataItemList);
+                }
+                combineDataList.postValue(oldAccountList);
+            }
+        });
+        return combineDataList;
+    }
 
-//
+    //
     public interface DataLoadListener {
         void onDataLoaded(AccountData data);
     }
@@ -75,9 +145,9 @@ public class DataRepository {
 //        return accountListDao.byIdGetAccount(id);
 //    }
 
-    public void getAccountByForId(DataLoadListener listener,int id){
+    public void getAccountByForId(DataLoadListener listener, int id) {
         AppRoomDataBase.databaseWriteExecutor.execute(() -> {
-            if(listener != null){
+            if (listener != null) {
                 listener.onDataLoaded(accountListDao.byIdGetAccount(id));
             }
         });

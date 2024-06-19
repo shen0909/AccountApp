@@ -30,4 +30,7 @@ public interface AccountDao{
 
     @Query("SELECT * FROM AccountListItemTable WHERE outList_id = :id ORDER BY datetime(data) DESC")
     LiveData<List<AccountDataItem>> getDataByForId(int id);
+
+    @Query("SELECT * FROM AccountListItemTable WHERE outList_id = :out_id ORDER BY datetime(data) DESC")
+    List<AccountDataItem> AccountListWithOutId(int out_id);
 }
