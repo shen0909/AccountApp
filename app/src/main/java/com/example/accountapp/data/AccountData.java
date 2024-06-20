@@ -27,6 +27,7 @@ public class AccountData {
     private String createDate; //账单创建时间
     private String outMoney; //支出金额
     private String inMoney; //收入金额
+    private int length = 0;//账单长度
 
     //    @Relation(parentColumn = "id", entityColumn = "item_id")
     //    @Embedded
@@ -82,9 +83,17 @@ public class AccountData {
         this.accountList = accountList;
     }
 
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
     @NonNull
     @Override
     public String toString() {
-        return "ID:" + getId() + "\t日期：" + getCreateDate() + "\t收入金额：" + getInMoney() + "\t支出金额：" + getOutMoney();
+        return "ID:" + getId() + "\t日期：" + getCreateDate() + "\t收入金额：" + getInMoney() + "\t支出金额：" + getOutMoney() + "\t账单长度" + getLength();
     }
 }

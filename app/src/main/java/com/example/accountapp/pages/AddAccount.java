@@ -214,14 +214,16 @@ public class AddAccount extends AppCompatActivity {
 
     // 提交账单
     public void submit(String submitDateTime) {
-        CommonTool commonTool = new CommonTool();
-        String submitDateAndTime = commonTool.dealDate(submitDateTime,3);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat_list = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date(System.currentTimeMillis());
+        String create_date_item = simpleDateFormat.format(date);
 
         AccountDataItem accountDataItem = new AccountDataItem();
         accountDataItem.setType(type);
         accountDataItem.setMoney(money.getText().toString());
         accountDataItem.setDetail(remark_txt.getText().toString());
-        accountDataItem.setData(submitDateAndTime);
+        accountDataItem.setData(create_date_item);
         accountDataItem.setIn(tabIndex);
         accountViewModel.insertAccountItem(accountDataItem,this);
 

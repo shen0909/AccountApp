@@ -7,12 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import com.example.accountapp.data.AccountData;
 import com.example.accountapp.data.Repository.DataRepository;
 import com.example.accountapp.data.Entry.AccountDataItem;
-import com.example.accountapp.utils.CommonTool;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AccountViewModel extends AndroidViewModel {
@@ -23,10 +20,12 @@ public class AccountViewModel extends AndroidViewModel {
     public AccountViewModel(@NonNull Application application, LifecycleOwner lifecycleOwner) {
         super(application);
         dataRepository = new DataRepository(application);
-        this.combineList = dataRepository.dealBackData();
+        this.combineList = dataRepository.backCombineList();
     }
 
     public LiveData<List<AccountData>> getCombineList(){
+//        dataRepository.dealBackData();
+        System.out.println("这里也更新了");
         return combineList;
     }
 
