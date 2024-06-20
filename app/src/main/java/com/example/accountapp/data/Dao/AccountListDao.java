@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 import com.example.accountapp.data.AccountData;
 import java.util.List;
 
@@ -15,6 +16,9 @@ public interface AccountListDao {
 
     @Query("SELECT * FROM AccountDataTable ORDER BY createDate DESC")
     List<AccountData> getAllDataList();
+
+    @Update()
+    void upDateAccount(AccountData accountData);
 
     @Query("SELECT * FROM AccountDataTable ORDER BY createDate DESC")
     LiveData<List<AccountData>> getAllLiveDataList();

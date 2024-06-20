@@ -44,23 +44,23 @@ public class DataRepository {
                     if (accountDataItem.getData().contains(nowAccountData.getCreateDate())) {
                         Log.e("当前有列表数据", "日期相等：列表日期-" + nowAccountData + "\t列表项日期-" + commonTool.dealDate(accountDataItem.getData(), 1));
                         accountDataItem.setOutList_id(nowAccountData.getId());
-                        nowAccountData.setLength(nowAccountData.getLength()+1);
+                        nowAccountData.setLength(nowAccountData.getLength() + 1);
                         accountDao.insertAccount(accountDataItem);
+                        accountListDao.upDateAccount(nowAccountData);
                         isFindMatchingAccount = true;
                         break;
                     }
                 }
-                if(!isFindMatchingAccount){
-                    createNewList(accountDataList.size(),accountDataItem,1);
+                if (!isFindMatchingAccount) {
+                    createNewList(accountDataList.size(), accountDataItem, 1);
                 }
-                dealBackData();
             }
         });
     }
 
-    private void createNewList(int length, AccountDataItem accountDataItem,int subLength) {
+    private void createNewList(int length, AccountDataItem accountDataItem, int subLength) {
         AccountData newAccountData = new AccountData();
-        newAccountData.setId(length+1);
+        newAccountData.setId(length + 1);
         newAccountData.setCreateDate(commonTool.dealDate(accountDataItem.getData(), 1));
         newAccountData.setLength(1);
         // 设置金额 1-收入 2-支出
@@ -69,37 +69,45 @@ public class DataRepository {
         } else {
             newAccountData.setOutMoney(accountDataItem.getMoney());
         }
-        accountDataItem.setOutList_id(length+1);
+        accountDataItem.setOutList_id(length + 1);
         Log.e("新建一条列表", "列表:" + newAccountData.toString() + "\n列表项:" + accountDataItem.toString());
         accountListDao.insertAccountList(newAccountData);
         accountDao.insertAccount(accountDataItem);
     }
 
     // 处理返回列表
-  public void dealBackData(){
-        Log.d("eventbus","接受更新");
+    public void dealBackData() {
+        Log.d("eventbus", "接受更新");
         AppRoomDataBase.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                Log.d("eventbus","接受更新——————————————");
+                Log.d("eventbus", "接受更新——————————————");
                 List<AccountData> newAccountList = new ArrayList<>();
                 // 获取列表,根据每个列表的id获取列表项
                 List<AccountData> oldAccountList = accountListDao.getAllDataList();
                 for (int i = 0; i < oldAccountList.size(); i++) {
                     AccountData oldAccountData = oldAccountList.get(i);
-                    Log.d("eventbus",oldAccountData.toString());
+                    Log.d("eventbus", oldAccountData.toString());
                     List<AccountDataItem> accountDataItemList = accountDao.AccountListWithOutId(oldAccountData.getId());
                     oldAccountData.setAccountList(accountDataItemList);
-                    oldAccountData.setLength(accountDataItemList.size()+1);
+//                    oldAccountData.setLength(accountDataItemList.size());
                 }
                 combineDataList.postValue(oldAccountList);
             }
         });
     }
 
-    public LiveData<List<AccountData>> backCombineList(){
+    public LiveData<List<AccountData>> backCombineList() {
         System.out.println("这里更新了");
         return combineDataList;
+    }
+
+    public LiveData<List<AccountDataItem>> getAccoutnItemList(){
+        return accountDao.getAllData();
+    }
+
+    public LiveData<List<AccountData>> getAccountList(){
+        return accountListDao.getAllLiveDataList();
     }
 
     //---------------------删除表

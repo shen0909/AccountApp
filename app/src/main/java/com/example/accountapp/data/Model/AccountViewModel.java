@@ -15,14 +15,24 @@ import java.util.List;
 public class AccountViewModel extends AndroidViewModel {
     private final DataRepository dataRepository;
     private LiveData<List<AccountData>> combineList;
+    private LiveData<List<AccountData>> accountList;
+    private LiveData<List<AccountDataItem>> accountItemList;
 
 
     public AccountViewModel(@NonNull Application application, LifecycleOwner lifecycleOwner) {
         super(application);
         dataRepository = new DataRepository(application);
         this.combineList = dataRepository.backCombineList();
+        this.accountItemList = dataRepository.getAccoutnItemList();
+        this.accountList = dataRepository.getAccountList();
+    }
+    public LiveData<List<AccountDataItem>> backItemList(){
+        return accountItemList;
     }
 
+    public LiveData<List<AccountData>> getListLiveData(){
+        return accountList;
+    }
     public LiveData<List<AccountData>> getCombineList(){
 //        dataRepository.dealBackData();
         System.out.println("这里也更新了");

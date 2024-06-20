@@ -38,24 +38,30 @@ public class AccountFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
-
-        // 观察 ViewModel中已组合好的数据
-        accountViewModel.getCombineList().observe(getViewLifecycleOwner(), new Observer<List<AccountData>>() {
-            @Override
-            public void onChanged(List<AccountData> accountData) {
-                Log.e("监听组合数据",""+accountData.size());
-                currentDataList = null;
-                for (int i = 0; i < accountData.size(); i++) {
-                    Log.e("监听组合数据第"+(i+1)+"项",""+accountData.toString());
-                    List<AccountDataItem> a = accountData.get(i).getAccountList();
-                    for (int j = 0; j < a.size(); j++) {
-                        Log.e("监听组合数据第"+(i+1)+"项的第"+(j+1)+"项tiem",""+a.get(j).toString());
-                    }
-                }
-                currentDataList = accountData;
-                updateRecycleView();
-            }
+        accountViewModel.getListLiveData().observe(getViewLifecycleOwner(), accountData -> updateDataList(accountData,accountViewModel.backItemList().getValue()));
+        accountViewModel.backItemList().observe(getViewLifecycleOwner(), accountDataItems -> {
+            Log.d("数据更新", "账单列表项更新了,列表长度" + (currentDataList.size() + 1));
+            updateDataList(accountViewModel.getListLiveData().getValue(), accountDataItems);
         });
+    }
+
+    /// 传入最近的账单列表和列表项列表，取出合适的放入
+    private void updateDataList(List<AccountData> accountData, List<AccountDataItem> accountDataItems) {
+        if (accountData == null || accountDataItems == null) {
+            return;
+        }
+        for (int i = 0; i < accountData.size(); i++) {
+            List<AccountDataItem> combine = new ArrayList<>();
+            int list_id = accountData.get(i).getId();
+            for (int j = 0; j < accountDataItems.size(); j++) {
+                if (list_id == accountDataItems.get(j).getOutList_id()) {
+                    combine.add(accountDataItems.get(j));
+                }
+            }
+            accountData.get(i).setAccountList(combine);
+        }
+        currentDataList = accountData;
+        updateRecycleView();
     }
 
     private void initView() {
