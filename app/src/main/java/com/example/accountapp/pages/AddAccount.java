@@ -1,24 +1,21 @@
 package com.example.accountapp.pages;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.accountapp.R;
-import com.example.accountapp.data.AccountData;
 import com.example.accountapp.data.Entry.AccountDataItem;
 import com.example.accountapp.data.AddIconItemData;
 import com.example.accountapp.data.Model.AccountViewModel;
-import com.example.accountapp.data.Repository.DataRepository;
 import com.example.accountapp.fragment.addaccount.AddExchangeFragment;
 import com.example.accountapp.fragment.addaccount.AddInFragment;
 import com.example.accountapp.fragment.addaccount.AddOutFragment;
+import com.example.accountapp.utils.CommonTool;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,18 +31,17 @@ public class AddAccount extends AppCompatActivity {
     private EditText remark_txt;
     private View divider1, divider2;
     private String type = "餐饮";
-    private List<TextView> num_list = new ArrayList<>();
-    private DataRepository dataRepository;
+    private final List<TextView> num_list = new ArrayList<>();
     private Boolean isAdd = false; // 初始是加号
     private Boolean isReduce = false;
     private AccountViewModel accountViewModel;
+    private String selectDateTime = new Date(System.currentTimeMillis()).toString() ; // 选中的时间和日期 - 默认当前
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_account);
-        dataRepository = new DataRepository(getApplicationContext());
         initView();
         // 动态加载 Fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -161,14 +157,14 @@ public class AddAccount extends AppCompatActivity {
         }
         // 保存再记操作
         else if (id == finish.getId()) {
-            submit();
+            submit(selectDateTime);
             finish();
         } else if (id == save_continue.getId()) {
             saveAndContinue();
         }
     }
     public void saveAndContinue(){
-        submit();
+        submit(selectDateTime);
         money.setText("0.00");
     }
 
@@ -217,16 +213,16 @@ public class AddAccount extends AppCompatActivity {
     }
 
     // 提交账单
-    public void submit() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat simpleDateFormat_list = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date(System.currentTimeMillis());
-        String create_date_list = simpleDateFormat_list.format(date);
-        String create_date_item = simpleDateFormat.format(date);
+    public void submit(String submitDateTime) {
+        CommonTool commonTool = new CommonTool();
+        String submitDateAndTime = commonTool.dealDate(submitDateTime,3);
 
-        List<AccountDataItem> accountDataItemList = new ArrayList<>();
-        AccountDataItem accountDataItem = new AccountDataItem(money.getText().toString(), type, remark_txt.getText().toString(), create_date_item, tabIndex);
-        accountDataItemList.add(accountDataItem);
+        AccountDataItem accountDataItem = new AccountDataItem();
+        accountDataItem.setType(type);
+        accountDataItem.setMoney(money.getText().toString());
+        accountDataItem.setDetail(remark_txt.getText().toString());
+        accountDataItem.setData(submitDateAndTime);
+        accountDataItem.setIn(tabIndex);
         accountViewModel.insertAccountItem(accountDataItem,this);
 
     }

@@ -18,6 +18,8 @@ public class CommonTool {
                 return dateFormat.format(newDate);
             }else if(changeType == 2){
                 return hourAndMinutes.format(newDate);
+            }else if(changeType == 3){
+                return fullDateFormat.format(newDate);
             }
         } catch (ParseException e) {
             throw new RuntimeException(e);

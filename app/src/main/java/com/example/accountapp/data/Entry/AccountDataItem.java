@@ -47,6 +47,7 @@ public class AccountDataItem {
         this.data = data;
         this.in = in;
     }
+    public AccountDataItem(){};
 
     public String getMoney() {
         return money;
@@ -88,13 +89,6 @@ public class AccountDataItem {
         this.in = in;
     }
 
-//    public int getOutList_id() {
-//        return outList_id;
-//    }
-//
-//    public void setOutList_id(int outList_id) {
-//        this.outList_id = outList_id;
-//    }
 
     @NonNull
     @Override

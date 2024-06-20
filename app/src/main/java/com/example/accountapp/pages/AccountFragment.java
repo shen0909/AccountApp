@@ -44,6 +44,7 @@ public class AccountFragment extends Fragment {
             @Override
             public void onChanged(List<AccountData> accountData) {
                 Log.e("监听组合数据",""+accountData.size());
+                currentDataList = null;
                 for (int i = 0; i < accountData.size(); i++) {
                     Log.e("监听组合数据第"+(i+1)+"项",""+accountData.toString());
                     List<AccountDataItem> a = accountData.get(i).getAccountList();
@@ -51,6 +52,8 @@ public class AccountFragment extends Fragment {
                         Log.e("监听组合数据第"+(i+1)+"项的第"+(j+1)+"项tiem",""+a.get(j).toString());
                     }
                 }
+                currentDataList = accountData;
+                updateRecycleView();
             }
         });
     }
