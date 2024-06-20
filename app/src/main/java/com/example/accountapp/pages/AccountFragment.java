@@ -38,7 +38,7 @@ public class AccountFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
-//        listenerDateChange();
+
         // 观察 ViewModel中已组合好的数据
         accountViewModel.getCombineList().observe(getViewLifecycleOwner(), new Observer<List<AccountData>>() {
             @Override
@@ -55,34 +55,6 @@ public class AccountFragment extends Fragment {
                 currentDataList = accountData;
                 updateRecycleView();
             }
-        });
-    }
-
-    /// 传入最近的账单列表和列表项列表，取出合适的放入
-    private void updateDataList(List<AccountData> accountData, List<AccountDataItem> accountDataItems) {
-        if (accountData == null || accountDataItems == null) {
-            return;
-        }
-        for (int i = 0; i < accountData.size(); i++) {
-            List<AccountDataItem> combine = new ArrayList<>();
-            int list_id = accountData.get(i).getId();
-            for (int j = 0; j < accountDataItems.size(); j++) {
-                if (list_id == accountDataItems.get(j).getOutList_id()) {
-                    combine.add(accountDataItems.get(j));
-                }
-            }
-            accountData.get(i).setAccountList(combine);
-        }
-        currentDataList = accountData;
-        updateRecycleView();
-    }
-
-    /// 观察LiveData ,处理数据
-    private void listenerDateChange() {
-        accountViewModel.getListLiveData().observe(getViewLifecycleOwner(), accountData -> updateDataList(accountData,accountViewModel.getAccountItemLiveData().getValue()));
-        accountViewModel.getAccountItemLiveData().observe(getViewLifecycleOwner(), accountDataItems -> {
-            Log.d("数据更新", "账单列表项更新了,列表长度" + (currentDataList.size() + 1));
-            updateDataList(accountViewModel.getListLiveData().getValue(), accountDataItems);
         });
     }
 

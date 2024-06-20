@@ -19,11 +19,10 @@ import java.util.List;
 public class DataRepository {
     private final AccountDao accountDao;
     private final AccountListDao accountListDao;
-    private AppRoomDataBase appRoomDataBase;
-    private CommonTool commonTool = new CommonTool();
+    private final CommonTool commonTool = new CommonTool();
 
     public DataRepository(Context context) {
-        appRoomDataBase = AppRoomDataBase.getDataBase(context);
+        AppRoomDataBase appRoomDataBase = AppRoomDataBase.getDataBase(context);
         accountDao = appRoomDataBase.accountDao();
         accountListDao = appRoomDataBase.accountListDao();
     }
@@ -71,34 +70,7 @@ public class DataRepository {
         accountDao.insertAccount(accountDataItem);
     }
 
-    /// 插入账单列表
-    public void insert(AccountData accountData) {
-        AppRoomDataBase.databaseWriteExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                accountListDao.insertAccountList(accountData);
-            }
-        });
-    }
-
-    // 获取账单列表
-    public LiveData<List<AccountData>> getListLiveData() {
-        return accountListDao.getAllLiveDataList();
-    }
-
-    public LiveData<List<AccountDataItem>> getData() {
-        return accountDao.getAllData();
-    }
-
-    public void deleteAllAccountItem() {
-        AppRoomDataBase.databaseWriteExecutor.execute(() -> accountDao.deleteAll());
-    }
-
-    public void deleteAllAccountList() {
-        AppRoomDataBase.databaseWriteExecutor.execute(() -> accountListDao.deleteAll());
-    }
-
-    /// 在这里处理合适的
+    // 处理返回列表
     public LiveData<List<AccountData>> dealBackData(){
         MutableLiveData<List<AccountData>> combineDataList = new MutableLiveData<>();
         AppRoomDataBase.databaseWriteExecutor.execute(new Runnable() {
@@ -118,20 +90,13 @@ public class DataRepository {
         return combineDataList;
     }
 
-    //
-    public interface DataLoadListener {
-        void onDataLoaded(AccountData data);
+    //---------------------删除表
+
+    public void deleteAllAccountItem() {
+        AppRoomDataBase.databaseWriteExecutor.execute(() -> accountDao.deleteAll());
     }
 
-    public LiveData<List<AccountDataItem>> getDataByForId(int id) {
-        return accountDao.getDataByForId(id);
-    }
-
-    public void getAccountByForId(DataLoadListener listener, int id) {
-        AppRoomDataBase.databaseWriteExecutor.execute(() -> {
-            if (listener != null) {
-                listener.onDataLoaded(accountListDao.byIdGetAccount(id));
-            }
-        });
+    public void deleteAllAccountList() {
+        AppRoomDataBase.databaseWriteExecutor.execute(() -> accountListDao.deleteAll());
     }
 }
