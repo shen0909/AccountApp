@@ -9,6 +9,7 @@
     android:padding="10dp"
     android:orientation="horizontal">
     <androidx.cardview.widget.CardView
+        android:id="@+id/accountItemIcon"
         android:layout_width="30dp"
         android:layout_height="30dp"
         app:cardBackgroundColor="@color/money_green"

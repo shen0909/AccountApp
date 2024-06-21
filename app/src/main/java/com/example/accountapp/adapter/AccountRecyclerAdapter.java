@@ -50,7 +50,7 @@ public class AccountRecyclerAdapter extends RecyclerView.Adapter<AccountRecycler
         LinearLayout linearLayout = new LinearLayout(context);
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
 
-        AccountListItemRecycle accountListItemRecycle = new AccountListItemRecycle(list.get(position).getAccountList());
+        AccountListItemRecycle accountListItemRecycle = new AccountListItemRecycle(list.get(position).getAccountList(),context);
         holder.recyclerView.setAdapter(accountListItemRecycle);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,DividerItemDecoration.VERTICAL);
         holder.recyclerView.addItemDecoration(dividerItemDecoration);

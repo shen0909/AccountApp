@@ -40,7 +40,6 @@ public class AccountFragment extends Fragment {
         initView();
         accountViewModel.getListLiveData().observe(getViewLifecycleOwner(), accountData -> updateDataList(accountData,accountViewModel.backItemList().getValue()));
         accountViewModel.backItemList().observe(getViewLifecycleOwner(), accountDataItems -> {
-            Log.d("数据更新", "账单列表项更新了,列表长度" + (currentDataList.size() + 1));
             updateDataList(accountViewModel.getListLiveData().getValue(), accountDataItems);
         });
     }
@@ -50,6 +49,8 @@ public class AccountFragment extends Fragment {
         if (accountData == null || accountDataItems == null) {
             return;
         }
+        currentDataList = null;
+        Log.d("数据更新", "账单列表项更新了,长度="+accountDataItems.size()+"\t列表长度" + accountData.size());
         for (int i = 0; i < accountData.size(); i++) {
             List<AccountDataItem> combine = new ArrayList<>();
             int list_id = accountData.get(i).getId();

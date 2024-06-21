@@ -1,6 +1,7 @@
 package com.example.accountapp.pages;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ public class AddAccount extends AppCompatActivity {
     private int tabIndex = 2; //当前选中的tab页 1.收入 2.支出 3.转账
     private TextView tab1, tab2, tab3;
     private TextView money, finish, save_continue, node, reduce_chu, add_x;
+    private TextView money_logo;
+
     private LinearLayout clear;
     private EditText remark_txt;
     private View divider1, divider2;
@@ -74,6 +77,7 @@ public class AddAccount extends AppCompatActivity {
         clear = findViewById(R.id.clear);
         add_x = findViewById(R.id.add_x);
         reduce_chu = findViewById(R.id.reduce_chu);
+        money_logo = findViewById(R.id.money_logo);
     }
 
     // 切换 tab页 点击方法
@@ -116,6 +120,23 @@ public class AddAccount extends AppCompatActivity {
             fragmentTransaction.replace(R.id.icon_frag, new AddExchangeFragment());
             fragmentTransaction.commit();
         }
+        dealChangeTab(tabIndex);
+    }
+
+    private void dealChangeTab(int type) {
+        int showColor;
+        if(type == 1){
+            showColor = ContextCompat.getColor(this,R.color.money_red);
+            finish.setBackgroundResource(R.drawable.finsh_in_button_style);
+        }else if(type == 2){
+            showColor = ContextCompat.getColor(this,R.color.money_green);
+            finish.setBackgroundResource(R.drawable.finish_out_button_style);
+        }else {
+            showColor = ContextCompat.getColor(this,R.color.orange);
+            finish.setBackgroundResource(R.drawable.finsh_exchange_button_style);
+        }
+        money.setTextColor(showColor);
+        money_logo.setTextColor(showColor);
     }
 
     // money == 0.00 归零  不等于 0.00则相加
@@ -209,7 +230,6 @@ public class AddAccount extends AppCompatActivity {
     /// 接受 ReycleView选择的icon
     public void receiveChooseIcon(AddIconItemData chooseItem) {
         type = chooseItem.getTitle();
-
     }
 
     // 提交账单

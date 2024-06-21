@@ -1,11 +1,13 @@
 package com.example.accountapp.adapter;
 
-import android.util.Log;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.accountapp.R;
 import com.example.accountapp.data.Entry.AccountDataItem;
@@ -14,11 +16,15 @@ import java.util.List;
 
 public class AccountListItemRecycle extends RecyclerView.Adapter<AccountListItemRecycle.ViewHolder> {
 
+    private Context context;
     private List<AccountDataItem> accountDataItemList;
     private CommonTool commonTool = new CommonTool();
+    private int showColor;
 
-    public AccountListItemRecycle(List<AccountDataItem> accountDataItemList) {
+    public AccountListItemRecycle(List<AccountDataItem> accountDataItemList, Context context) {
         this.accountDataItemList = accountDataItemList;
+        this.context = context;
+        this.showColor = ContextCompat.getColor(context, R.color.money_green);
     }
 
     @NonNull
@@ -31,15 +37,21 @@ public class AccountListItemRecycle extends RecyclerView.Adapter<AccountListItem
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AccountDataItem accountDataItem = accountDataItemList.get(position);
-        Log.d("账单显示页数据", "" + accountDataItem + "\t时间" + accountDataItem.getData());
+        if (!accountDataItem.getDetail().isEmpty()) {
+            holder.timeDived.setVisibility(View.VISIBLE);
+        }
+        if (accountDataItem.getIn() == 1) {
+            showColor = ContextCompat.getColor(context, R.color.money_red);
+        }else if(accountDataItem.getIn() == 2){
+            showColor = ContextCompat.getColor(context, R.color.money_green);
+        }
+
         holder.detailMoney.setText(accountDataItem.getMoney());
         holder.type_tv.setText(accountDataItem.getType());
         holder.detail.setText(accountDataItem.getDetail());
-        String detial_time = commonTool.dealDate(accountDataItem.getData(), 2);
-        holder.detial_time.setText(detial_time);
-        if (!accountDataItem.getDetail().isEmpty()){
-            holder.timeDived.setVisibility(View.VISIBLE);
-        }
+        holder.detial_time.setText(commonTool.dealDate(accountDataItem.getData(), 2));
+        holder.accountItemIcon.setCardBackgroundColor(showColor);
+        holder.detailMoney.setTextColor(showColor);
     }
 
     @Override
@@ -54,6 +66,7 @@ public class AccountListItemRecycle extends RecyclerView.Adapter<AccountListItem
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView detailMoney, type_tv, detail, detial_time, timeDived;
+        private CardView accountItemIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -62,6 +75,7 @@ public class AccountListItemRecycle extends RecyclerView.Adapter<AccountListItem
             detail = itemView.findViewById(R.id.detial);
             detial_time = itemView.findViewById(R.id.detial_time);
             timeDived = itemView.findViewById(R.id.timeDived);
+            accountItemIcon = itemView.findViewById(R.id.accountItemIcon);
         }
     }
 }

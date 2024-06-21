@@ -1,13 +1,12 @@
 package com.example.accountapp.fragment.addaccount;
 
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ public class AddInFragment extends Fragment implements InterfaceCollection.Choos
 
     @Override
     public void showChoose(AddIconItemData chooseItem) {
-        System.out.println("点击了"+chooseItem);
+        Log.d("收入页点击图标","chooseItem");
         ((AddAccount)requireActivity()).receiveChooseIcon(chooseItem);
     }
     @Override
