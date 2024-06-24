@@ -6,19 +6,21 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import com.example.accountapp.pages.AccountFragment;
 import com.example.accountapp.pages.MoneyFragment;
 import com.example.accountapp.pages.SaveMoneyFragment;
 import com.example.accountapp.pages.SumAllMoney;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private BottomNavigationView bt_Nv;
     private ViewPager2 viewPager2;
+    private LinearLayout bt_Nv;
+    private ImageView zd_icon,zc_icon,cq_icon,tj_icon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,24 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initView();
         setViewPage();
-        setBtNv();
 
-    }
-
-    private void setBtNv() {
-        bt_Nv.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.bt_zd) {
-                viewPager2.setCurrentItem(0);
-            } else if (id == R.id.bt_zc) {
-                viewPager2.setCurrentItem(1);
-            } else if (id == R.id.bt_cq) {
-                viewPager2.setCurrentItem(2);
-            } else if (id == R.id.bt_tj) {
-                viewPager2.setCurrentItem(3);
-            }
-            return true;
-        });
     }
 
     private void setViewPage() {
@@ -65,36 +50,64 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         viewPager2.setOffscreenPageLimit(4);
+
+        // 注册 ViewPager2.OnPageChangeCallback 监听器，监听页面切换事件。当页面切换时，调用 changeBottomTab() 方法更新底部导航栏图标的状态
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 //viewPage 选择item，对应的bottonNavigation也切换位序
-                btNvonPageSelected(position);
-//                bt_Nv.setSelectedItemId(position);
+                changeBottomTab(position);
             }
         });
-    }
-
-    private void btNvonPageSelected(int position) {
-        switch (position) {
-            case 0:
-                bt_Nv.setSelectedItemId(R.id.bt_zd);
-                break;
-            case 1:
-                bt_Nv.setSelectedItemId(R.id.bt_zc);
-                break;
-            case 2:
-                bt_Nv.setSelectedItemId(R.id.bt_cq);
-                break;
-            case 3:
-                bt_Nv.setSelectedItemId(R.id.bt_tj);
-                break;
-        }
     }
 
     private void initView() {
         bt_Nv = findViewById(R.id.bt_Nv);
         viewPager2 = findViewById(R.id.viewPager2);
+        zd_icon = findViewById(R.id.zd_icon);
+        zc_icon = findViewById(R.id.zc_icon);
+        cq_icon = findViewById(R.id.cq_icon);
+        tj_icon = findViewById(R.id.tj_icon);
+    }
+
+    /// 点击底部导航栏切换页面
+    public void changeView(View view) {
+        int id = view.getId();
+        if (id == R.id.zd_icon) {
+            viewPager2.setCurrentItem(0);
+        } else if (id == R.id.zc_icon) {
+            viewPager2.setCurrentItem(1);
+        } else if (id == R.id.cq_icon) {
+            viewPager2.setCurrentItem(2);
+        } else if (id == R.id.tj_icon) {
+            viewPager2.setCurrentItem(3);
+        }
+    }
+
+    // 切换导航栏效果
+    public void changeBottomTab(int position){
+        if(position == 0){
+            zd_icon.setImageResource(R.drawable.zhangdan_select);
+            zc_icon.setImageResource(R.drawable.zichan);
+            cq_icon.setImageResource(R.drawable.cunqian);
+            tj_icon.setImageResource(R.drawable.tongji);
+        } else if (position == 1) {
+            zd_icon.setImageResource(R.drawable.zhangdan);
+            zc_icon.setImageResource(R.drawable.zichan_select);
+            cq_icon.setImageResource(R.drawable.cunqian);
+            tj_icon.setImageResource(R.drawable.tongji);
+        } else if (position == 2) {
+            zd_icon.setImageResource(R.drawable.zhangdan);
+            zc_icon.setImageResource(R.drawable.zichan);
+            cq_icon.setImageResource(R.drawable.cunqian_select);
+            tj_icon.setImageResource(R.drawable.tongji);
+        } else if (position == 3) {
+            zd_icon.setImageResource(R.drawable.zhangdan);
+            zc_icon.setImageResource(R.drawable.zichan);
+            cq_icon.setImageResource(R.drawable.cunqian);
+            tj_icon.setImageResource(R.drawable.tongji_select);
+        }
+
     }
 }

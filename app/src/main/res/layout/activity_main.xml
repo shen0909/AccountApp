@@ -17,73 +17,127 @@
 
     </androidx.viewpager2.widget.ViewPager2>
 
-    <!--<LinearLayout
-        android:id="@+id/linearLayout"
+    <LinearLayout
+        android:id="@+id/bt_Nv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_marginBottom="10dp"
+        android:padding="10dp"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="20dp"
-            android:orientation="vertical">
-            <ImageButton
-                android:layout_width="45dp"
+            android:gravity="center_horizontal"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/zd_icon"
+                android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/zhangdan" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <ImageButton
-                android:layout_width="45dp"
-                android:layout_height="40dp"
-                android:background="@drawable/zichan" />
+                android:src="@drawable/zhangdan"
+                android:onClick="changeView"
+                android:scaleType="fitXY" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <ImageButton
-                android:layout_width="45dp"
+            android:gravity="center_horizontal"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/zc_icon"
+                android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/cunqian" />
+                android:src="@drawable/zichan"
+                android:onClick="changeView"/>
         </LinearLayout>
-
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <ImageButton
-                android:layout_width="45dp"
+            android:gravity="center_horizontal"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/cq_icon"
+                android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/tongji"/>
+                android:src="@drawable/cunqian"
+                android:onClick="changeView"
+                android:scaleType="fitXY" />
         </LinearLayout>
+        <LinearLayout
+            android:gravity="center_horizontal"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/tj_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/tongji"
+                android:onClick="changeView"
+                android:scaleType="fitXY"/>
+        </LinearLayout>
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_marginLeft="20dp"-->
+<!--            android:orientation="vertical">-->
+<!--            <ImageButton-->
+<!--                android:layout_width="25dp"-->
+<!--                android:layout_height="20dp"-->
+<!--                android:background="@drawable/zhangdan" />-->
+<!--        </LinearLayout>-->
 
-    </LinearLayout>-->
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bt_Nv"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="?android:attr/windowBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/botton_menu" />
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:orientation="vertical">-->
+<!--            <ImageButton-->
+<!--                android:layout_width="45dp"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:background="@drawable/zichan" />-->
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:orientation="vertical">-->
+<!--            <ImageButton-->
+<!--                android:layout_width="45dp"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:background="@drawable/cunqian" />-->
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:orientation="vertical">-->
+<!--            <ImageButton-->
+<!--                android:layout_width="45dp"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:background="@drawable/tongji"/>-->
+<!--        </LinearLayout>-->
+
+    </LinearLayout>
+
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bt_Nv"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="80dp"-->
+<!--        android:layout_marginStart="0dp"-->
+<!--        android:layout_marginEnd="0dp"-->
+<!--        android:background="?android:attr/windowBackground"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:menu="@menu/botton_menu" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>
