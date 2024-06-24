@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -16,7 +17,6 @@ import com.example.accountapp.data.Model.AccountViewModel;
 import com.example.accountapp.fragment.addaccount.AddExchangeFragment;
 import com.example.accountapp.fragment.addaccount.AddInFragment;
 import com.example.accountapp.fragment.addaccount.AddOutFragment;
-import com.example.accountapp.utils.CommonTool;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,7 +38,7 @@ public class AddAccount extends AppCompatActivity {
     private Boolean isAdd = false; // 初始是加号
     private Boolean isReduce = false;
     private AccountViewModel accountViewModel;
-    private String selectDateTime = new Date(System.currentTimeMillis()).toString() ; // 选中的时间和日期 - 默认当前
+    private String selectDateTime = new Date(System.currentTimeMillis()).toString(); // 选中的时间和日期 - 默认当前
 
 
     @Override
@@ -51,7 +51,7 @@ public class AddAccount extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();//开启事务
         fragmentTransaction.add(R.id.icon_frag, new AddOutFragment());
         fragmentTransaction.commit();
-        accountViewModel = new AccountViewModel(getApplication(),this);
+        accountViewModel = new AccountViewModel(getApplication());
     }
 
     // 初始化view
@@ -125,14 +125,14 @@ public class AddAccount extends AppCompatActivity {
 
     private void dealChangeTab(int type) {
         int showColor;
-        if(type == 1){
-            showColor = ContextCompat.getColor(this,R.color.money_red);
+        if (type == 1) {
+            showColor = ContextCompat.getColor(this, R.color.money_red);
             finish.setBackgroundResource(R.drawable.finsh_in_button_style);
-        }else if(type == 2){
-            showColor = ContextCompat.getColor(this,R.color.money_green);
+        } else if (type == 2) {
+            showColor = ContextCompat.getColor(this, R.color.money_green);
             finish.setBackgroundResource(R.drawable.finish_out_button_style);
-        }else {
-            showColor = ContextCompat.getColor(this,R.color.orange);
+        } else {
+            showColor = ContextCompat.getColor(this, R.color.orange);
             finish.setBackgroundResource(R.drawable.finsh_exchange_button_style);
         }
         money.setTextColor(showColor);
@@ -170,11 +170,7 @@ public class AddAccount extends AppCompatActivity {
             setMoney(node.getText().toString());
         } else if (id == clear.getId()) {
             String newMoney = cancelEndChar(money.getText().toString());
-            if (newMoney.isEmpty()) {
-                money.setText("0.00");
-            } else {
-                money.setText(newMoney);
-            }
+            money.setText(newMoney);
         }
         // 保存再记操作
         else if (id == finish.getId()) {
@@ -184,7 +180,8 @@ public class AddAccount extends AppCompatActivity {
             saveAndContinue();
         }
     }
-    public void saveAndContinue(){
+
+    public void saveAndContinue() {
         submit(selectDateTime);
         money.setText("0.00");
     }
@@ -197,8 +194,11 @@ public class AddAccount extends AppCompatActivity {
     // todo:如何才能在连续点两次的情况下只输入一次？连续点两次加，会添加×
     public void calculateShow(View view) {
         int id = view.getId();
-        char endChar = money.getText().charAt(money.getText().length() - 1);
         String newMoney = money.getText().toString();
+        if (newMoney == null || newMoney == "0.00") {
+            return;
+        }
+        char endChar = money.getText().charAt(money.getText().length() - 1);
 
         /// 如果最后一位是运算符，则修改成相反运算符，否则加上运算符
         // 1.第一次点击此方法或者前面是以为是数字，运算符都该是初始状态，如何判断第一次？newMoeny的值是否有变化
@@ -223,6 +223,9 @@ public class AddAccount extends AppCompatActivity {
 
     /// 删除最后一个字符
     public String cancelEndChar(String string) {
+        if(string.length() <= 1 || string == "0.00") {
+            return "0.00";
+        }
         int length = string.length() - 1;
         return string.subSequence(0, length).toString();
     }
@@ -245,7 +248,7 @@ public class AddAccount extends AppCompatActivity {
         accountDataItem.setDetail(remark_txt.getText().toString());
         accountDataItem.setData(create_date_item);
         accountDataItem.setIn(tabIndex);
-        accountViewModel.insertAccountItem(accountDataItem,this);
+        accountViewModel.insertAccountItem(accountDataItem);
 
     }
 }
