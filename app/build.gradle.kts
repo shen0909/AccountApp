@@ -46,4 +46,7 @@ dependencies {
     annotationProcessor ("androidx.room:room-compiler:2.6.1")
     androidTestImplementation ("androidx.room:room-testing:2.6.1")
     implementation("org.greenrobot:eventbus:3.3.1")
+
+    // 添加glide框架依赖
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
 }

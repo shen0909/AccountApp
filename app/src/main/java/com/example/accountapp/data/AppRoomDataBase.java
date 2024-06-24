@@ -6,6 +6,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import com.example.accountapp.data.Dao.AccountDao;
 import com.example.accountapp.data.Dao.AccountListDao;
+import com.example.accountapp.data.Entry.AccountData;
 import com.example.accountapp.data.Entry.AccountDataItem;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

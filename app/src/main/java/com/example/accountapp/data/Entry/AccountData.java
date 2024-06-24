@@ -1,18 +1,10 @@
-package com.example.accountapp.data;
-
-import android.content.Context;
+package com.example.accountapp.data.Entry;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
-import androidx.room.Embedded;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-import androidx.room.Relation;
-
-import com.example.accountapp.data.Entry.AccountDataItem;
-import com.example.accountapp.data.Model.AccountViewModel;
 
 import java.util.List;
 

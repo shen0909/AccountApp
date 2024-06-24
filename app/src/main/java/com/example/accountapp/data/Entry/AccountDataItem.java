@@ -3,10 +3,7 @@ package com.example.accountapp.data.Entry;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
-
-import com.example.accountapp.data.AccountData;
 
 // 账单数据类
 // 关联 AccountData.class，主键是

@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.accountapp.R;
-import com.example.accountapp.data.AccountData;
+import com.example.accountapp.data.Entry.AccountData;
+
 import java.util.List;
 // 帐单列表 RecyclerAdapter
 public class AccountRecyclerAdapter extends RecyclerView.Adapter<AccountRecyclerAdapter.ViewHolder> {

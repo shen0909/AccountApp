@@ -5,7 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
-import com.example.accountapp.data.AccountData;
+import com.example.accountapp.data.Entry.AccountData;
 import java.util.List;
 
 /// 账单列表 Dao
