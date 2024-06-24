@@ -362,7 +362,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/white"
-                    android:background="@drawable/finish_button_style"
+                    android:background="@drawable/finish_out_button_style"
                     style="@style/keyBroadTextStyle"
                     android:text="完成" />
 
