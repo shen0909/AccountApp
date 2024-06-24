@@ -30,8 +30,8 @@ public class AccountFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        accountViewModel = new AccountViewModel(getActivity().getApplication(), this);
-        return inflater.inflate(R.layout.fragment_account, container, false);
+        accountViewModel = new AccountViewModel(getActivity().getApplication());
+        return inflater.inflate(R.layout.fragment_account, container);
     }
 
     @Override

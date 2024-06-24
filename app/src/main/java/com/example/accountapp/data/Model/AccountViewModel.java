@@ -19,7 +19,7 @@ public class AccountViewModel extends AndroidViewModel {
     private LiveData<List<AccountDataItem>> accountItemList;
 
 
-    public AccountViewModel(@NonNull Application application, LifecycleOwner lifecycleOwner) {
+    public AccountViewModel(@NonNull Application application) {
         super(application);
         dataRepository = new DataRepository(application);
         this.combineList = dataRepository.backCombineList();
@@ -40,7 +40,7 @@ public class AccountViewModel extends AndroidViewModel {
     }
 
     /// 插入账单item数据
-    public void insertAccountItem(AccountDataItem accountDataItem, LifecycleOwner lifecycleOwner) {
+    public void insertAccountItem(AccountDataItem accountDataItem) {
         Log.d(TAG, "添加的Item账单数据: " + accountDataItem.toString());
         dataRepository.dealInsert(accountDataItem);
     }

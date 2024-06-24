@@ -26,18 +26,44 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-        <TextView
-            android:id="@+id/out_moeny_tv"
+        <LinearLayout
+            android:id="@+id/out_linear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="支出：" />
+            android:visibility="gone"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/out_moeny_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="支出：" />
 
-        <TextView
-            android:id="@+id/out_moeny"
+            <TextView
+                android:id="@+id/out_moeny"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="000" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/in_linear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="000" />
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:layout_marginLeft="10dp">
+            <TextView
+                android:id="@+id/in_moeny_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="收入：" />
 
+            <TextView
+                android:id="@+id/in_moeny"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="000" />
+        </LinearLayout>
 
     </LinearLayout>
 

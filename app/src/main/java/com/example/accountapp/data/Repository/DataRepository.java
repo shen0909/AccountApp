@@ -45,6 +45,23 @@ public class DataRepository {
                         Log.e("当前有列表数据", "日期相等：列表日期-" + nowAccountData + "\t列表项日期-" + commonTool.dealDate(accountDataItem.getData(), 1));
                         accountDataItem.setOutList_id(nowAccountData.getId());
                         nowAccountData.setLength(nowAccountData.getLength() + 1);
+                        if (accountDataItem.getIn() == 1) {
+                            String oldMoney = "0.00";
+                            if(nowAccountData.getInMoney() != null){
+                                oldMoney = nowAccountData.getInMoney();
+                            }
+                            Double inMoney = Double.parseDouble(oldMoney) + Double.parseDouble(accountDataItem.getMoney());
+                            Log.e("账单列表项金额-收入",inMoney.toString());
+                            nowAccountData.setInMoney(inMoney.toString());
+                        } else {
+                            String oldMoney = "0.00";
+                            if(nowAccountData.getOutMoney() != null){
+                                oldMoney = nowAccountData.getOutMoney();
+                            }
+                            Double outMoney = Double.parseDouble(oldMoney) + Double.parseDouble(accountDataItem.getMoney());
+                            Log.e("账单列表项金额-支出",outMoney.toString());
+                            nowAccountData.setOutMoney(outMoney.toString());
+                        }
                         accountDao.insertAccount(accountDataItem);
                         accountListDao.upDateAccount(nowAccountData);
                         isFindMatchingAccount = true;

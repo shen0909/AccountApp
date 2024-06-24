@@ -29,11 +29,17 @@ public class AccountRecyclerAdapter extends RecyclerView.Adapter<AccountRecycler
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private TextView date_tv; // 日期
+        private TextView in_money,out_money;
         private RecyclerView recyclerView;
+        private LinearLayout in_linear,out_linear;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             date_tv = itemView.findViewById(R.id.date_tv);
             recyclerView = itemView.findViewById(R.id.recycle_account_item);
+            in_linear = itemView.findViewById(R.id.in_linear);
+            out_linear = itemView.findViewById(R.id.out_linear);
+            in_money = itemView.findViewById(R.id.in_moeny);
+            out_money = itemView.findViewById(R.id.out_moeny);
         }
     }
     @NonNull
@@ -45,11 +51,18 @@ public class AccountRecyclerAdapter extends RecyclerView.Adapter<AccountRecycler
 
     @Override
     public void onBindViewHolder(@NonNull AccountRecyclerAdapter.ViewHolder holder, int position) {
-        holder.date_tv.setText(list.get(position).getCreateDate());
-
-        LinearLayout linearLayout = new LinearLayout(context);
+        AccountData currentAccountData = list.get(position);
+        holder.date_tv.setText(currentAccountData.getCreateDate());
+        // -设置列表金额
+        if(currentAccountData.getInMoney() != null){
+            holder.in_linear.setVisibility(View.VISIBLE);
+            holder.in_money.setText(currentAccountData.getInMoney());
+        }
+        if (currentAccountData.getOutMoney() != null) {
+            holder.out_linear.setVisibility(View.VISIBLE);
+            holder.out_money.setText(currentAccountData.getOutMoney());
+        }
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-
         AccountListItemRecycle accountListItemRecycle = new AccountListItemRecycle(list.get(position).getAccountList(),context);
         holder.recyclerView.setAdapter(accountListItemRecycle);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,DividerItemDecoration.VERTICAL);

@@ -172,11 +172,12 @@ public class AddAccount extends AppCompatActivity {
             String newMoney = cancelEndChar(money.getText().toString());
             money.setText(newMoney);
         }
-        // 保存再记操作
         else if (id == finish.getId()) {
             submit(selectDateTime);
             finish();
-        } else if (id == save_continue.getId()) {
+        }
+        // 保存再记操作
+        else if (id == save_continue.getId()) {
             saveAndContinue();
         }
     }
