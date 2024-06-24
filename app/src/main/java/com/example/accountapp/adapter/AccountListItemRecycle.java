@@ -56,7 +56,11 @@ public class AccountListItemRecycle extends RecyclerView.Adapter<AccountListItem
             Glide.with(context).load(bitmap).into(holder.item_icon);
         } else {
             // 处理图片为空的情况，例如显示默认图片
-             Glide.with(context).load(R.drawable.canyin).into(holder.item_icon);
+            if(accountDataItem.getIn() == 1){
+                Glide.with(context).load(R.drawable.gongzi).into(holder.item_icon);
+            }else{
+                Glide.with(context).load(R.drawable.canyin).into(holder.item_icon);
+            }
         }
         holder.detailMoney.setText(accountDataItem.getMoney());
         holder.type_tv.setText(accountDataItem.getType());

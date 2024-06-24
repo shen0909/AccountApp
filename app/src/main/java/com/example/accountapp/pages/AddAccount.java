@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -88,6 +89,7 @@ public class AddAccount extends AppCompatActivity {
         int index = view.getId();
         if (index == R.id.tab1) {
             System.out.println("支出");
+            type = "餐饮";
             tabIndex = 2;
             divider1.setVisibility(View.INVISIBLE);
             divider2.setVisibility(View.VISIBLE);
@@ -100,6 +102,7 @@ public class AddAccount extends AppCompatActivity {
             fragmentTransaction.commit();
         } else if (index == R.id.tab2) {
             System.out.println("收入");
+            type = "工资";
             tabIndex = 1;
             divider1.setVisibility(View.INVISIBLE);
             divider2.setVisibility(View.INVISIBLE);
@@ -242,6 +245,7 @@ public class AddAccount extends AppCompatActivity {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream);
         imageByte = outputStream.toByteArray();
+        Log.d("添加页接收到的",type);
 
     }
 
