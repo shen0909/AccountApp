@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import com.example.accountapp.InterfaceCollection;
 import com.example.accountapp.R;
 import com.example.accountapp.data.AddIconItemData;
@@ -51,14 +52,14 @@ public class AddAccountIcomRecycleyAdapter extends RecyclerView.Adapter<AddAccou
 
         // 当前是否被选中
         if (position == selecPosition) {
-            holder.icon.setImageResource(addIconItemDataList.get(position).getIconPath());
+            Glide.with(context).load(addIconItemDataList.get(position).getIconPath()).into(holder.icon);
             if(currencyType == 0){
                 holder.card_icon.setCardBackgroundColor(ContextCompat.getColor(context, R.color.money_green));
             }else{
                 holder.card_icon.setCardBackgroundColor(ContextCompat.getColor(context, R.color.money_red));
             }
         } else {
-            holder.icon.setImageResource(addIconItemDataList.get(position).getUnselectIconPath());
+            Glide.with(context).load(addIconItemDataList.get(position).getUnselectIconPath()).into(holder.icon);
             holder.card_icon.setCardBackgroundColor(ContextCompat.getColor(context, R.color.back_grey));
         }
     }

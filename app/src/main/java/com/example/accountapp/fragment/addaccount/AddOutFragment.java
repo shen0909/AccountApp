@@ -23,7 +23,7 @@ import java.util.List;
 public class AddOutFragment extends Fragment implements InterfaceCollection.ChooseIcon {
     @Override
     public void showChoose(AddIconItemData chooseItem) {
-        Log.d("支出页点击图标","chooseItem");
+        Log.d("支出页点击图标",chooseItem.toString());
         ((AddAccount)requireActivity()).receiveChooseIcon(chooseItem);
     }
     @Override

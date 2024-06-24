@@ -36,6 +36,7 @@ public class AccountDataItem {
     private String detail; // 消费详情(备注)
     private String data; //消费时间
     private int in; // 1.收入 2.支出
+    private byte[] imageByte;
 
     public AccountDataItem(String money, String type, String detail, String data, int in) {
         this.money = money;
@@ -86,6 +87,13 @@ public class AccountDataItem {
         this.in = in;
     }
 
+    public byte[] getImageByte() {
+        return imageByte;
+    }
+
+    public void setImageByte(byte[] imageByte) {
+        this.imageByte = imageByte;
+    }
 
     @NonNull
     @Override

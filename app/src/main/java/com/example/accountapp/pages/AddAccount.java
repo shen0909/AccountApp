@@ -4,8 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -17,6 +18,7 @@ import com.example.accountapp.data.Model.AccountViewModel;
 import com.example.accountapp.fragment.addaccount.AddExchangeFragment;
 import com.example.accountapp.fragment.addaccount.AddInFragment;
 import com.example.accountapp.fragment.addaccount.AddOutFragment;
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,6 +41,7 @@ public class AddAccount extends AppCompatActivity {
     private Boolean isReduce = false;
     private AccountViewModel accountViewModel;
     private String selectDateTime = new Date(System.currentTimeMillis()).toString(); // 选中的时间和日期 - 默认当前
+    private byte[] imageByte;
 
 
     @Override
@@ -234,6 +237,12 @@ public class AddAccount extends AppCompatActivity {
     /// 接受 ReycleView选择的icon
     public void receiveChooseIcon(AddIconItemData chooseItem) {
         type = chooseItem.getTitle();
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),chooseItem.getIconPath());
+        // 将图片转换为字节数组并存储到数据库
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream);
+        imageByte = outputStream.toByteArray();
+
     }
 
     // 提交账单
@@ -249,6 +258,7 @@ public class AddAccount extends AppCompatActivity {
         accountDataItem.setDetail(remark_txt.getText().toString());
         accountDataItem.setData(create_date_item);
         accountDataItem.setIn(tabIndex);
+        accountDataItem.setImageByte(imageByte);
         accountViewModel.insertAccountItem(accountDataItem);
 
     }

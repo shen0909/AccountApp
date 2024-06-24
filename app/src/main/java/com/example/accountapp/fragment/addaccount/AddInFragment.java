@@ -46,9 +46,6 @@ public class AddInFragment extends Fragment implements InterfaceCollection.Choos
         });
 
         recyclerView.setLayoutManager(gridLayoutManager); //设置布局
-        List<AddIconItemData> addIconItemDataList = new AllData().getAddIconInDataList();
-        System.out.println(addIconItemDataList.size());
-
         AddAccountIcomRecycleyAdapter adapter = new AddAccountIcomRecycleyAdapter(new AllData().getAddIconInDataList(), getContext(), this,1);
         recyclerView.setAdapter(adapter); //设置适配器
     }

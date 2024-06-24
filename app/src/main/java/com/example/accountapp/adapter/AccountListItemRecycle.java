@@ -1,14 +1,18 @@
 package com.example.accountapp.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import com.example.accountapp.R;
 import com.example.accountapp.data.Entry.AccountDataItem;
 import com.example.accountapp.utils.CommonTool;
@@ -46,6 +50,14 @@ public class AccountListItemRecycle extends RecyclerView.Adapter<AccountListItem
             showColor = ContextCompat.getColor(context, R.color.money_green);
         }
 
+        if (accountDataItem.getImageByte() != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(accountDataItem.getImageByte(), 0, accountDataItem.getImageByte().length);
+            // 使用 Glide 加载图片
+            Glide.with(context).load(bitmap).into(holder.item_icon);
+        } else {
+            // 处理图片为空的情况，例如显示默认图片
+             Glide.with(context).load(R.drawable.canyin).into(holder.item_icon);
+        }
         holder.detailMoney.setText(accountDataItem.getMoney());
         holder.type_tv.setText(accountDataItem.getType());
         holder.detail.setText(accountDataItem.getDetail());
@@ -67,6 +79,7 @@ public class AccountListItemRecycle extends RecyclerView.Adapter<AccountListItem
 
         private TextView detailMoney, type_tv, detail, detial_time, timeDived;
         private CardView accountItemIcon;
+        private ImageView item_icon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,6 +89,7 @@ public class AccountListItemRecycle extends RecyclerView.Adapter<AccountListItem
             detial_time = itemView.findViewById(R.id.detial_time);
             timeDived = itemView.findViewById(R.id.timeDived);
             accountItemIcon = itemView.findViewById(R.id.accountItemIcon);
+            item_icon = itemView.findViewById(R.id.item_icon);
         }
     }
 }

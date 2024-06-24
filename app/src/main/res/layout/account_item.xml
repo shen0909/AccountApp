@@ -17,6 +17,7 @@
         app:cardUseCompatPadding="false"
         app:cardCornerRadius="15dp">
         <ImageView
+            android:id="@+id/item_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
