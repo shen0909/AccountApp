@@ -1,5 +1,9 @@
 package com.example.accountapp.utils;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,5 +29,13 @@ public class CommonTool {
             throw new RuntimeException(e);
         }
         return oldDate;
+    }
+
+    // Drawable 资源转换成字节数组
+    public byte[] drawableToByte(Resources resources,int drawableId){
+        Bitmap bitmap = BitmapFactory.decodeResource(resources,drawableId);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
     }
 }

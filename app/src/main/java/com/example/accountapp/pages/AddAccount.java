@@ -19,7 +19,7 @@ import com.example.accountapp.data.Model.AccountViewModel;
 import com.example.accountapp.fragment.addaccount.AddExchangeFragment;
 import com.example.accountapp.fragment.addaccount.AddInFragment;
 import com.example.accountapp.fragment.addaccount.AddOutFragment;
-import java.io.ByteArrayOutputStream;
+import com.example.accountapp.utils.CommonTool;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +28,7 @@ import java.util.Objects;
 
 // 添加账单 Activity
 public class AddAccount extends AppCompatActivity {
+    private CommonTool commonTool = new CommonTool();
     private int tabIndex = 2; //当前选中的tab页 1.收入 2.支出 3.转账
     private TextView tab1, tab2, tab3;
     private TextView money, finish, save_continue, node, reduce_chu, add_x;
@@ -42,7 +43,7 @@ public class AddAccount extends AppCompatActivity {
     private Boolean isReduce = false;
     private AccountViewModel accountViewModel;
     private String selectDateTime = new Date(System.currentTimeMillis()).toString(); // 选中的时间和日期 - 默认当前
-    private byte[] imageByte;
+    private byte[] imageByte = commonTool.drawableToByte(getResources(),R.drawable.canyin);
 
 
     @Override
@@ -90,6 +91,7 @@ public class AddAccount extends AppCompatActivity {
         if (index == R.id.tab1) {
             System.out.println("支出");
             type = "餐饮";
+            imageByte = commonTool.drawableToByte(getResources(),R.drawable.canyin);
             tabIndex = 2;
             divider1.setVisibility(View.INVISIBLE);
             divider2.setVisibility(View.VISIBLE);
@@ -103,6 +105,7 @@ public class AddAccount extends AppCompatActivity {
         } else if (index == R.id.tab2) {
             System.out.println("收入");
             type = "工资";
+            imageByte = commonTool.drawableToByte(getResources(),R.drawable.gongzi);
             tabIndex = 1;
             divider1.setVisibility(View.INVISIBLE);
             divider2.setVisibility(View.INVISIBLE);
@@ -239,14 +242,9 @@ public class AddAccount extends AppCompatActivity {
 
     /// 接受 ReycleView选择的icon
     public void receiveChooseIcon(AddIconItemData chooseItem) {
-        type = chooseItem.getTitle();
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),chooseItem.getIconPath());
-        // 将图片转换为字节数组并存储到数据库
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream);
-        imageByte = outputStream.toByteArray();
         Log.d("添加页接收到的",type);
-
+        type = chooseItem.getTitle();
+        imageByte = commonTool.drawableToByte(getResources(),chooseItem.getIconPath());
     }
 
     // 提交账单
