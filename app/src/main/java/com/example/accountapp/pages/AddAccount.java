@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +26,7 @@ import java.util.Objects;
 
 // 添加账单 Activity
 public class AddAccount extends AppCompatActivity {
-    private CommonTool commonTool = new CommonTool();
+    private final CommonTool commonTool = new CommonTool();
     private int tabIndex = 2; //当前选中的tab页 1.收入 2.支出 3.转账
     private TextView tab1, tab2, tab3;
     private TextView money, finish, save_continue, node, reduce_chu, add_x;
@@ -43,7 +41,7 @@ public class AddAccount extends AppCompatActivity {
     private Boolean isReduce = false;
     private AccountViewModel accountViewModel;
     private String selectDateTime = new Date(System.currentTimeMillis()).toString(); // 选中的时间和日期 - 默认当前
-    private byte[] imageByte = commonTool.drawableToByte(getResources(),R.drawable.canyin);
+    private byte[] imageByte;
 
 
     @Override
@@ -57,6 +55,7 @@ public class AddAccount extends AppCompatActivity {
         fragmentTransaction.add(R.id.icon_frag, new AddOutFragment());
         fragmentTransaction.commit();
         accountViewModel = new AccountViewModel(getApplication());
+        imageByte = commonTool.drawableToByte(getResources(),R.drawable.canyin);
     }
 
     // 初始化view
@@ -242,8 +241,8 @@ public class AddAccount extends AppCompatActivity {
 
     /// 接受 ReycleView选择的icon
     public void receiveChooseIcon(AddIconItemData chooseItem) {
-        Log.d("添加页接收到的",type);
         type = chooseItem.getTitle();
+        Log.d("添加页接收到的",type);
         imageByte = commonTool.drawableToByte(getResources(),chooseItem.getIconPath());
     }
 

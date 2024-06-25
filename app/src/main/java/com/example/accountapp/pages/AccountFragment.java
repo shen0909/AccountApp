@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,7 +18,6 @@ import com.example.accountapp.R;
 import com.example.accountapp.adapter.AccountRecyclerAdapter;
 import com.example.accountapp.data.Model.AccountViewModel;
 import com.example.accountapp.data.Entry.AccountData;
-import com.example.accountapp.data.Entry.AccountDataItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,8 @@ public class AccountFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        accountViewModel = new AccountViewModel(getActivity().getApplication());
+        // 使用 ViewModelProvider 来确保 ViewModel 的生命周期与 Fragment 相关联
+        accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
         return inflater.inflate(R.layout.fragment_account, container);
     }
 
@@ -37,31 +39,14 @@ public class AccountFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
-        accountViewModel.getListLiveData().observe(getViewLifecycleOwner(), accountData -> updateDataList(accountData,accountViewModel.backItemList().getValue()));
-        accountViewModel.backItemList().observe(getViewLifecycleOwner(), accountDataItems -> {
-            updateDataList(accountViewModel.getListLiveData().getValue(), accountDataItems);
-        });
-    }
-
-    /// 传入最近的账单列表和列表项列表，取出合适的放入
-    private void updateDataList(List<AccountData> accountData, List<AccountDataItem> accountDataItems) {
-        if (accountData == null || accountDataItems == null) {
-            return;
-        }
-        currentDataList = null;
-        Log.d("数据更新", "账单列表项更新了,长度="+accountDataItems.size()+"\t列表长度" + accountData.size());
-        for (int i = 0; i < accountData.size(); i++) {
-            List<AccountDataItem> combine = new ArrayList<>();
-            int list_id = accountData.get(i).getId();
-            for (int j = 0; j < accountDataItems.size(); j++) {
-                if (list_id == accountDataItems.get(j).getOutList_id()) {
-                    combine.add(accountDataItems.get(j));
-                }
+        accountViewModel.getCombinedAccountData().observe(getViewLifecycleOwner(), new Observer<List<AccountData>>() {
+            @Override
+            public void onChanged(List<AccountData> accountData) {
+                Log.e("合并多个LiveData","fragment 检查到了");
+                currentDataList = accountData;
+                updateRecycleView();
             }
-            accountData.get(i).setAccountList(combine);
-        }
-        currentDataList = accountData;
-        updateRecycleView();
+        });
     }
 
     private void initView() {

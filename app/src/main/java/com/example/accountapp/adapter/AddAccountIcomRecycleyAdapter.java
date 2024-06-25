@@ -25,7 +25,7 @@ public class AddAccountIcomRecycleyAdapter extends RecyclerView.Adapter<AddAccou
     private final InterfaceCollection.ChooseIcon chooseIconLisener;
     private int currencyType; // 0-支出 1-收入
 
-    public AddAccountIcomRecycleyAdapter(List<AddIconItemData> addIconItemDataList, Context context,InterfaceCollection.ChooseIcon chooseIconLisener,int currencyType) {
+    public AddAccountIcomRecycleyAdapter(List<AddIconItemData> addIconItemDataList, Context context, InterfaceCollection.ChooseIcon chooseIconLisener, int currencyType) {
         this.addIconItemDataList = addIconItemDataList;
         this.context = context;
         this.chooseIconLisener = chooseIconLisener;
@@ -53,9 +53,9 @@ public class AddAccountIcomRecycleyAdapter extends RecyclerView.Adapter<AddAccou
         // 当前是否被选中
         if (position == selecPosition) {
             Glide.with(context).load(addIconItemDataList.get(position).getIconPath()).into(holder.icon);
-            if(currencyType == 0){
+            if (currencyType == 0) {
                 holder.card_icon.setCardBackgroundColor(ContextCompat.getColor(context, R.color.money_green));
-            }else{
+            } else {
                 holder.card_icon.setCardBackgroundColor(ContextCompat.getColor(context, R.color.money_red));
             }
         } else {
