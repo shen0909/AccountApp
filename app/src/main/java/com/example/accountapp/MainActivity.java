@@ -5,11 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import com.example.accountapp.pages.AccountFragment;
 import com.example.accountapp.pages.MoneyFragment;
 import com.example.accountapp.pages.SaveMoneyFragment;
@@ -20,7 +25,17 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private ViewPager2 viewPager2;
     private LinearLayout bt_Nv;
-    private ImageView zd_icon,zc_icon,cq_icon,tj_icon;
+    private ImageView zd_icon, zc_icon, cq_icon, tj_icon;
+
+    // 接收来自 Androidsutdio App的广播
+    // 创建广播接收器
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(context, intent.getExtras().getString("data_global"), Toast.LENGTH_LONG).show();
+            Log.d("接受全局广播", intent.getExtras().getString("data_global"));
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +44,17 @@ public class MainActivity extends AppCompatActivity {
         initView();
         setViewPage();
 
+        // 注册广播接收器
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("send_global_action");
+        registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 解除广播接收器
+        unregisterReceiver(broadcastReceiver);
     }
 
     private void setViewPage() {
@@ -86,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // 切换导航栏效果
-    public void changeBottomTab(int position){
-        if(position == 0){
+    public void changeBottomTab(int position) {
+        if (position == 0) {
             zd_icon.setImageResource(R.drawable.zhangdan_select);
             zc_icon.setImageResource(R.drawable.zichan);
             cq_icon.setImageResource(R.drawable.cunqian);
