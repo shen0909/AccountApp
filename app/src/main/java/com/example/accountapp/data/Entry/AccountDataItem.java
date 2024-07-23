@@ -4,6 +4,7 @@ package com.example.accountapp.data.Entry;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import java.util.Arrays;
 
 // 账单数据类
 // 关联 AccountData.class，主键是
@@ -98,6 +99,6 @@ public class AccountDataItem {
     @NonNull
     @Override
     public String toString() {
-        return "ID：" + getItem_id() + "\t备注：" + getDetail() + "\t金额：" + getMoney() + "\t类型：" + getType() + "\t方向：" + (getIn() == 1 ? "收入" : "支出" )+ "\t外键" + getOutList_id();
+        return "ID：" + getItem_id() + "\t备注：" + getDetail() + "\t金额：" + getMoney() + "\t类型：" + getType() + "\t方向：" + (getIn() == 1 ? "收入" : "支出" )+ "\t外键" + getOutList_id()+ "\t图片字节数组" + Arrays.toString(getImageByte());
     }
 }

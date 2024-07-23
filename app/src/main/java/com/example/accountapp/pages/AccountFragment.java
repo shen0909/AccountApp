@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.bumptech.glide.Glide;
 import com.example.accountapp.R;
 import com.example.accountapp.adapter.AccountRecyclerAdapter;
 import com.example.accountapp.data.Model.AccountViewModel;
@@ -49,6 +50,17 @@ public class AccountFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("销毁","销毁AccountFragment");
+        // 清理 Glide 加载的图片资源
+        Glide.get(requireContext()).clearMemory(); // 清理 Glide 内存缓存
+        new Thread(() -> {
+            Glide.get(requireContext()).clearDiskCache(); // 清理 Glide 磁盘缓存
+        }).start();
+    }
+
     private void initView() {
         initRecycleView();
         FloatingActionButton floatingActionButton = getView().findViewById(R.id.floatActionButton);
@@ -70,7 +82,7 @@ public class AccountFragment extends Fragment {
     public void updateRecycleView() {
         if (currentDataList != null) {
             accountRecyclerAdapter.updateData(currentDataList);
-            accountRecyclerAdapter.notifyDataSetChanged();
+//            accountRecyclerAdapter.notifyDataSetChanged();
         }
     }
 }

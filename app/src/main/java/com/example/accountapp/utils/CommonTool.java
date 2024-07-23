@@ -9,6 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CommonTool {
+    private Bitmap bitmap;
+
     // 处理日期格式
     public String dealDate(String oldDate,int changeType) {
         // 日期格式
@@ -33,7 +35,7 @@ public class CommonTool {
 
     // Drawable 资源转换成字节数组
     public byte[] drawableToByte(Resources resources,int drawableId){
-        Bitmap bitmap = BitmapFactory.decodeResource(resources,drawableId);
+        bitmap = BitmapFactory.decodeResource(resources,drawableId);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
         return byteArrayOutputStream.toByteArray();

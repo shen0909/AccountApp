@@ -7,9 +7,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.accountapp.CallBck.AccountDataDiffCallback;
 import com.example.accountapp.R;
 import com.example.accountapp.data.Entry.AccountData;
 
@@ -24,8 +27,11 @@ public class AccountRecyclerAdapter extends RecyclerView.Adapter<AccountRecycler
         this.list = list;
         this.context = context;
     }
-    public void updateData(List<AccountData> list){
-        this.list = list;
+    public void updateData(List<AccountData> newData){
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new AccountDataDiffCallback(list, newData));
+        list.clear();
+        list.addAll(newData);
+        result.dispatchUpdatesTo(this);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{

@@ -1,8 +1,6 @@
 package com.example.accountapp.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +11,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.accountapp.R;
 import com.example.accountapp.data.Entry.AccountDataItem;
 import com.example.accountapp.utils.CommonTool;
@@ -46,19 +45,26 @@ public class AccountListItemRecycle extends RecyclerView.Adapter<AccountListItem
         }
         if (accountDataItem.getIn() == 1) {
             showColor = ContextCompat.getColor(context, R.color.money_red);
-        }else if(accountDataItem.getIn() == 2){
+        } else if (accountDataItem.getIn() == 2) {
             showColor = ContextCompat.getColor(context, R.color.money_green);
         }
 
         if (accountDataItem.getImageByte() != null) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(accountDataItem.getImageByte(), 0, accountDataItem.getImageByte().length);
+            // 使用 BitmapFactory.decodeByteArray 解码图片容易导致内存溢出
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(accountDataItem.getImageByte(), 0, accountDataItem.getImageByte().length);
             // 使用 Glide 加载图片
-            Glide.with(context).load(bitmap).into(holder.item_icon);
+//            Glide.with(context).load(accountDataItem.getImageByte()).override(50,50).into(holder.item_icon);
+            // 在 Glide 加载图片时添加缓存策略，避免重复加载相同的图片资源
+            Glide.with(context)
+                    .load(accountDataItem.getImageByte())
+                    .override(50, 50)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL) // 添加缓存策略
+                    .into(holder.item_icon);
         } else {
             // 处理图片为空的情况，例如显示默认图片
-            if(accountDataItem.getIn() == 1){
+            if (accountDataItem.getIn() == 1) {
                 Glide.with(context).load(R.drawable.gongzi).into(holder.item_icon);
-            }else{
+            } else {
                 Glide.with(context).load(R.drawable.canyin).into(holder.item_icon);
             }
         }
