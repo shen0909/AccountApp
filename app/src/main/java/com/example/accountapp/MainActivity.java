@@ -5,10 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -48,6 +52,30 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("send_global_action");
         registerReceiver(broadcastReceiver, intentFilter);
+        getContentProviderData();
+
+    }
+
+    // 接收来自其他app的数据
+    public void getContentProviderData() {
+        ContentResolver contentResolver = getContentResolver();
+        Uri uri = Uri.parse("content://com.example.androidstudiostydy.provider/STUTDY_SQLITE_TABLE");
+
+        @SuppressLint("Recycle")
+        // 检查 Cursor 是否为空
+        Cursor cursor = contentResolver.query(uri, null, null, null, null);
+        if (cursor != null) {
+            while(cursor.moveToNext()){
+                int id = cursor.getInt(0);
+                String name = cursor.getString(1);
+                String phone = cursor.getString(2);
+                String pwd = cursor.getString(3);
+                Log.d("contentprovider", id + "\t" + name + "\t" + phone + "\t" + pwd);
+            }
+            cursor.close();
+        } else {
+            Toast.makeText(this, "无法获取内容提供者数据", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
